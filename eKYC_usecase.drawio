@@ -1,0 +1,166 @@
+<mxfile host="app.diagrams.net" modified="2024-05-24T08:21:36.962Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0" etag="6Y0tKpmOQX_Ca6JxgSqj" version="24.4.7" type="device">
+  <diagram name="Page-1" id="H7KVvtE7reFBv78hRx6q">
+    <mxGraphModel dx="3652" dy="1570" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Hl4egoBuE78TTmcoovpe-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="150" width="510" height="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-3" value="Signup / Login" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="357.5" y="200" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-4" value="Provide basic NID&lt;div&gt;information&amp;nbsp;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="352.5" y="290" width="225" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-5" value="Submit NID details" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="362.5" y="380" width="217.5" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-6" value="Citizens" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="10" y="240" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-7" value="Oragnizations" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-20" y="600" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-10" value="Government" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="900" y="230" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-11" value="Upload NID image&lt;div&gt;and Face verification&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="358.75" y="475" width="225" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-12" value="Complete and get AA&lt;div&gt;based wallet&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="363.75" y="580" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-13" value="Give access or revoke organization to e-KYC&amp;nbsp;&lt;div&gt;information&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="363.75" y="660" width="215" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-14" value="Update KYC" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="361.25" y="750" width="222.5" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-15" value="Show all user list" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="365" y="850" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-16" value="Show all verified user list" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="368.75" y="940" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-17" value="Show access user lists&lt;div&gt;and approved information&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="365" y="1030" width="221.25" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-19" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Hl4egoBuE78TTmcoovpe-6" target="Hl4egoBuE78TTmcoovpe-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="270" as="sourcePoint" />
+            <mxPoint x="240" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-20" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="270" as="sourcePoint" />
+            <mxPoint x="240" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-21" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="270" as="sourcePoint" />
+            <mxPoint x="362" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-22" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="270" as="sourcePoint" />
+            <mxPoint x="372" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-23" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="270" as="sourcePoint" />
+            <mxPoint x="369" y="518" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-24" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="50" y="280" as="sourcePoint" />
+            <mxPoint x="374" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-26" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="290" as="sourcePoint" />
+            <mxPoint x="374" y="705" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-27" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="630" as="sourcePoint" />
+            <mxPoint x="200" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-28" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="630" as="sourcePoint" />
+            <mxPoint x="368.75" y="970" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-29" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="30" y="640" as="sourcePoint" />
+            <mxPoint x="378.75" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-30" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="630" as="sourcePoint" />
+            <mxPoint x="360" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-31" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Hl4egoBuE78TTmcoovpe-10" target="Hl4egoBuE78TTmcoovpe-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="680" as="sourcePoint" />
+            <mxPoint x="660" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-32" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="260" as="sourcePoint" />
+            <mxPoint x="660" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-33" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-16">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="260" as="sourcePoint" />
+            <mxPoint x="660" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-34" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="260" as="sourcePoint" />
+            <mxPoint x="660" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-35" value="Give API access to oraganizations" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="371.25" y="1140" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-37" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-35">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="260" as="sourcePoint" />
+            <mxPoint x="660" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-38" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="Hl4egoBuE78TTmcoovpe-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="260" as="sourcePoint" />
+            <mxPoint x="600" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-39" value="Revoke access to AA wallet&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="371.25" y="1220" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hl4egoBuE78TTmcoovpe-40" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Hl4egoBuE78TTmcoovpe-10" target="Hl4egoBuE78TTmcoovpe-39">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="770" as="sourcePoint" />
+            <mxPoint x="340" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

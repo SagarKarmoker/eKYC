@@ -1,0 +1,5 @@
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+
+docker run -e ENCRYPTION_PASSWORD="sagar1234" -e THIRDWEB_API_SECRET_KEY="3BcWn6Wva3lpDgVUhcYseUlOrWWVfnvAeDYn1tCBFAvF8XTlxbaQxdXkQDk_mRsdy4uldFdow4Vl5ivzPMEURQ" -e ADMIN_WALLET_ADDRESS="0x776f5b481881DF6A0d32930118Bbcc52D313485B" -e POSTGRES_CONNECTION_URL="postgresql://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable" -e ENABLE_HTTPS=true -p 3005:3005 --pull=always --cpus="0.5" thirdweb/engine:latest
+
+docker run --net=host -it -e NGROK_AUTHTOKEN=2bUITVs2bJ5oE2rR71VzDBWdHBl_2BhZoJ8szQZdBF5gngK5B ngrok/ngrok:latest http https://localhost:3005
