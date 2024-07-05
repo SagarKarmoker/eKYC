@@ -9,22 +9,17 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
  * @author Sagar Karmoker
  * @notice updated with Interface IWalletContract
  * @dev WalletContract contract hold the nid and wallet shard3 mapping.
- * @dev Current version: V2
+ * @dev Current version: V2.1
  */
-
-interface IWalletContract {
-    function registerWalletOwner(uint _nid, address _walletOwner) external;
-}
 
 contract WalletContract is Initializable {
     address public deployer;
     address[] public admins;
 
     // nid => shard3
-    mapping (uint => string) public wallets;
-
-    // Intance of WalletContract
-    IWalletContract public walletContract;
+    mapping(uint => string) public wallets;
+    // Track of wallet owner
+    mapping(uint => address) public kycWallets;
 
     function initialize(address _deployer) public initializer {
         deployer = _deployer;
@@ -54,8 +49,9 @@ contract WalletContract is Initializable {
         deployer = _newDeployer;
     }
 
-    function setWallet(uint _nid, string memory _shard3) public onlyDeployerOrAdmins {
+    function setWallet(uint _nid, string memory _shard3, address _wallet) public onlyDeployerOrAdmins {
         wallets[_nid] = _shard3;
+        kycWallets[_nid] = _wallet;
     }
 
     function getWallet(uint _nid) public view returns (string memory)  {
@@ -70,12 +66,13 @@ contract WalletContract is Initializable {
         wallets[_nid] = _shard3;
     }
 
-    // external function calling
-    function setWalletContract(address _walletContract) external onlyDeployer {
-        walletContract = IWalletContract(_walletContract);
+    // Update the wallet owner
+    function updateWalletOwner(uint _nid, address _walletOwner) public onlyDeployerOrAdmins {
+        kycWallets[_nid] = _walletOwner;
     }
 
-    function registerWalletOwner(uint _nid, address _walletOwner) external onlyDeployerOrAdmins {
-        walletContract.registerWalletOwner(_nid, _walletOwner);
+    // external function 
+    function getWalletOwner(uint _nid) external view returns (address) {
+        return kycWallets[_nid];
     }
 }

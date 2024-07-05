@@ -6,13 +6,16 @@ pragma solidity ^0.8.0;
  * @author Sagar Karmoker
  * @notice Deployed KYCRegistry contract
  * @dev KYCRegistry contract hold the KYC data and verification status.
- * @dev Current version: V2
+ * @dev Current version: V2.1
  * @dev This contract is deployed and used by WalletContractV1 contract.
  * @dev WalletContractV1 contract hold the nid and wallet shard3 mapping.
  */
 
-import "./WalletContractV1.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
+interface IWalletContract {
+    function getWalletOwner(uint _nid) external view returns (address);
+}
 
 contract KYCRegistry is Initializable {
     address public authority;
@@ -36,8 +39,8 @@ contract KYCRegistry is Initializable {
     // Granted access to verifier
     mapping(address => address[]) public userGrantedAccess;
 
-    // Track of wallet owner 
-    mapping(uint => address) public walletOwner;
+    // Wallet owner mapping
+    IWalletContract public walletContract;
 
     // one time call
     function initialize() public initializer {
@@ -83,19 +86,9 @@ contract KYCRegistry is Initializable {
         return kycData[_user][latest-1];
     }
 
-    // Reg the wallet owner
-    function registerWalletOwner(uint _nid, address _walletOwner) external onlyAuthority {
-        walletOwner[_nid] = _walletOwner;
-    }
-
-    // Update the wallet owner
-    function updateWalletOwner(uint _nid, address _walletOwner) public onlyAuthority {
-        walletOwner[_nid] = _walletOwner;
-    }
-
     // Submit KYC data
     function submitKYC(string memory _ipfsHash, uint _nid) public {
-        require(walletOwner[_nid] == msg.sender, "Not authorized to submit KYC data");
+        require(getWalletOwner(_nid) == msg.sender, "Not authorized to submit KYC data");
         kycData[msg.sender].push(KYCData(_ipfsHash, false, block.timestamp));
         emit KYCSubmitted(msg.sender, _ipfsHash);
     }
@@ -122,5 +115,15 @@ contract KYCRegistry is Initializable {
         require(listOfVerifier[_verifier], "Verifier not found in list");
         verifierPermissions[msg.sender][_verifier] = false;
         emit VerifierAccessRevoked(msg.sender, _verifier);
+    }
+
+
+    // Calling external functions
+    function setWalletContract(address _walletContract) public onlyAuthority {
+        walletContract = IWalletContract(_walletContract);
+    }
+
+    function getWalletOwner(uint _nid) public view returns (address) {
+        return walletContract.getWalletOwner(_nid);
     }
 }

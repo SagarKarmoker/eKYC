@@ -17,4 +17,4 @@ main()
     });
 
 // npx hardhat run --network custom scripts/walletcontractv1.js
-// deployed: 0x956d2836B50A63D635932E7F388DC79ba5f7dcD9
+// deployed: 0xD2D031Df2eDFd36E58D890F7FE602C27263954b1

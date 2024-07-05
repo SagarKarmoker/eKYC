@@ -17,4 +17,4 @@ main()
     });
 
 // npx hardhat run --network custom scripts/kyc.js
-// deployed: 0x507f6ac3C5ECAb82849Bd5786B3219EDeE44bd4c (V2)
+// deployed: 0x18F9c1AeCd8B14448c6845deeEA5D9c17b244202

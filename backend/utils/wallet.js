@@ -5,13 +5,15 @@ const { Buffer } = require('buffer');
 const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
+const KYCRegistryContract = require('../abis/KYCRegistry.json')
 
 // user->shard1 (browser)
 // nid->shard2 (kms)
 // passwordHash->shard3 (blockchain)
 
 // Smart contract ABI and address
-const WalletContractAddress = "0x956d2836B50A63D635932E7F388DC79ba5f7dcD9"
+const WalletContractAddress = "0xD2D031Df2eDFd36E58D890F7FE602C27263954b1"
+const KYCRegistryContractAddress = "0x18F9c1AeCd8B14448c6845deeEA5D9c17b244202"
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
@@ -53,11 +55,18 @@ const createWallet = async (nid, password) => {
         console.log(tx);
 
         if (tx !== null) {
-            // Return the wallet address to the user and shard1
-            return {
-                walletAddress,
-                shard: shards[0].toString('hex')
-            };
+            const regForWallet = await contract.registerWalletOwner(nid, walletAddress, {
+                gasPrice: 0
+            });
+            await regForWallet.wait();
+
+            if (regForWallet !== null) {
+                // Return the wallet address to the user and shard1
+                return {
+                    walletAddress,
+                    shard: shards[0].toString('hex')
+                };
+            }
         }
     } catch (error) {
         console.log(error);
@@ -109,7 +118,7 @@ const submitKYC = async (ipfsHash, nid) => {
     try {
         // Retrieve shards from the database
         const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
-        
+
         if (!shardKey) {
             throw new Error('ShardKey not found for the given NID');
         }
@@ -120,7 +129,7 @@ const submitKYC = async (ipfsHash, nid) => {
         const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
 
         // Send the transaction to store the KYC data on the blockchain
-        
+
 
     } catch (error) {
         console.log(error);
