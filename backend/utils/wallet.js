@@ -31,6 +31,8 @@ const createWallet = async (nid, password) => {
         // Store shard2 in KMS or DB using our key
         const shard2 = new ShardKey({
             nidNumber: nid,
+            address: walletAddress,
+            shardA: shards[0].toString(), // optional
             shardB: CryptoJS.AES.encrypt(shards[1].toString('hex'), "ekycdev").toString()
         });
         await shard2.save();
@@ -62,5 +64,10 @@ const createWallet = async (nid, password) => {
     }
 }
 
+const getWalletAddress = (nid) => {
+    // Return the wallet address to the user
+    return ShardKey.findOne({ nidNumber: nid }).select('address').exec();
+}
+
 // export the function
-module.exports = { createWallet }
+module.exports = { createWallet, getWalletAddress }

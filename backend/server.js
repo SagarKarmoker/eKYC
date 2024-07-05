@@ -10,7 +10,7 @@ const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
 
 // Smart contract functions
-const { createWallet } = require("./utils/wallet");
+const { createWallet, getWalletAddress } = require("./utils/wallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -323,7 +323,7 @@ app.post("/createWallet", async (req, res) => {
 app.get("/getWalletAddress", async (req, res) => {
   try {
     const { nid } = req.body;
-    const walletAddress = await getWalletAddress("1234"); // replace with nid
+    const walletAddress = await getWalletAddress(nid);
     console.log({ walletAddress });
     res.status(201).json(walletAddress);
   } catch (error) {
