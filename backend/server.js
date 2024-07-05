@@ -121,7 +121,6 @@ app.get("/people", async (req, res) => {
 });
 
 // upload nid excel
-
 app.post("/upload", async (req, res) => {
   try {
     await nid.insertMany(req.body);
