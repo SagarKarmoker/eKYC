@@ -320,50 +320,14 @@ app.post("/createWallet", async (req, res) => {
   }
 });
 
-app.get("/getWalletAddress", async (req, res) => {
+app.post("/getWalletAddress", async (req, res) => {
   try {
-    const { nid } = req.body;
-    const walletAddress = await getWalletAddress(nid);
-    console.log({ walletAddress });
-    res.status(201).json(walletAddress);
+    const { nidNumber } = req.body;
+    console.log(nidNumber)
+    const walletAddress = await getWalletAddress(nidNumber);
+    res.status(200).json(walletAddress.address);
   } catch (error) {
     res.status(500).json({ error: "Unable to get wallet address" });
-  }
-});
-
-app.get("/generateTree", async (req, res) => {
-  try {
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    res.status(201).json(bufferToHex(root));
-  } catch (error) {
-    res.status(500).json({ error: "Unable to generate tree" });
-  }
-});
-
-app.get("/generateProof", async (req, res) => {
-  try {
-    const { element } = req.body;
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    const proof = generateProof(tree, element).map(bufferToHex);
-    res.status(201).json(proof);
-  } catch (error) {
-    res.status(500).json({ error: "Unable to generate proof" });
-  }
-});
-
-app.get("/getData", async (req, res) => {
-  try {
-    const address = await getWalletAddress("1234");
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    const proof = generateProof(tree, address[0].toLowerCase()).map(
-      bufferToHex
-    );
-    res.status(201).json(proof);
-  } catch (error) {
-    res.status(500).json({ error: "Unable to generate proof" });
   }
 });
 
