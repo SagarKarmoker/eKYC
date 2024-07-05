@@ -19,6 +19,7 @@ function ImageUpload() {
       });
       console.log("KYC Data Submitted Successfully:", response.data);
       console.log("KYC User NID Number:", nid);
+      return response.data.hash;
     } catch (error) {
       console.error("Error submitting KYC data:", error);
     }
@@ -51,7 +52,23 @@ function ImageUpload() {
       // The last entry is the directory with all files
       const directory = addedFiles[addedFiles.length - 1];
       if (directory.cid) {
-        storeKYCData(directory.cid.toString());
+        const response = await storeKYCData(directory.cid.toString());
+        if (response) {
+          Swal.fire({
+            title: "Success",
+            text: "Images uploaded to IPFS successfully under a single hash.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to upload images to IPFS.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
         console.log(directory.cid.toString());
       }
       return `http://127.0.0.1:8080/ipfs/${directory.cid}`;
@@ -79,28 +96,10 @@ function ImageUpload() {
     const backFile = await fetch(backImage).then((r) => r.blob());
 
     // Upload both files as a directory to IPFS
-    const directoryIpfsUrl = await uploadFilesAsDirectory([
+    await uploadFilesAsDirectory([
       frontFile,
       backFile,
     ]);
-
-    if (directoryIpfsUrl) {
-      console.log("Directory IPFS URL:", directoryIpfsUrl);
-      Swal.fire({
-        title: "Success",
-        text: "Images uploaded to IPFS successfully under a single hash.",
-        icon: "success",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: "Failed to upload images to IPFS.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    }
   }
 
   return (

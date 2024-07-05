@@ -12,7 +12,7 @@ const KYCRegistryContract = require('../abis/KYCRegistry.json')
 // passwordHash->shard3 (blockchain)
 
 // Smart contract ABI and address
-const WalletContractAddress = "0xD2D031Df2eDFd36E58D890F7FE602C27263954b1"
+const WalletContractAddress = "0xd2d031df2edfd36e58d890f7fe602c27263954b1"
 const KYCRegistryContractAddress = "0x18F9c1AeCd8B14448c6845deeEA5D9c17b244202"
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
@@ -30,15 +30,6 @@ const createWallet = async (nid, password) => {
         const secret = Buffer.from(privateKey.slice(2), 'hex'); // Remove '0x' from private key
         const shards = sss.split(secret, { shares: 3, threshold: 2 });
 
-        // Store shard2 in KMS or DB using our key
-        const shard2 = new ShardKey({
-            nidNumber: nid,
-            address: walletAddress,
-            shardA: shards[0].toString('hex'),
-            shardB: CryptoJS.AES.encrypt(shards[1].toString('hex'), "ekycdev").toString()
-        });
-        await shard2.save();
-
         // Store shard3 in blockchain
         const encryptedShard3 = CryptoJS.AES.encrypt(shards[2].toString('hex'), password).toString();
 
@@ -47,7 +38,7 @@ const createWallet = async (nid, password) => {
         const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
 
         // Send the transaction to store shard3 on the blockchain
-        const tx = await contract.setWallet(nid, encryptedShard3, {
+        const tx = await contract.setWallet(nid, encryptedShard3, walletAddress, {
             gasPrice: 0
         });
         await tx.wait();
@@ -55,17 +46,18 @@ const createWallet = async (nid, password) => {
         console.log(tx);
 
         if (tx !== null) {
-            const regForWallet = await contract.registerWalletOwner(nid, walletAddress, {
-                gasPrice: 0
+            // Store shard2 in KMS or DB using our key
+            const shard2 = new ShardKey({
+                nidNumber: nid,
+                address: walletAddress,
+                shardA: shards[0].toString('hex'),
+                shardB: CryptoJS.AES.encrypt(shards[1].toString('hex'), "ekycdev").toString()
             });
-            await regForWallet.wait();
+            await shard2.save();
 
-            if (regForWallet !== null) {
-                // Return the wallet address to the user and shard1
-                return {
-                    walletAddress,
-                    shard: shards[0].toString('hex')
-                };
+            return {
+                walletAddress,
+                shard: shards[0].toString('hex')
             }
         }
     } catch (error) {
@@ -83,7 +75,7 @@ const decryptShard = async (shardKey, password) => {
     try {
         // Retrieve encryptedShard3 from the blockchain
         const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, provider);
-        const encryptedShard3 = await contract.getWallet(nid);
+        const encryptedShard3 = await contract.getWallet(shardKey.nidNumber);
 
         if (!encryptedShard3) {
             throw new Error('Shard3 not found on the blockchain for the given NID');
@@ -118,6 +110,7 @@ const submitKYC = async (ipfsHash, nid) => {
     try {
         // Retrieve shards from the database
         const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
+        console.log(shardKey)
 
         if (!shardKey) {
             throw new Error('ShardKey not found for the given NID');
@@ -126,11 +119,18 @@ const submitKYC = async (ipfsHash, nid) => {
         // decrypt shard
         const secret = await decryptShard(shardKey, "1234");
         const signer = new ethers.Wallet(secret, provider);
-        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
 
         // Send the transaction to store the KYC data on the blockchain
+        const tx = await contract.submitKYC(ipfsHash, nid, {
+            gasPrice: 0
+        });
+        await tx.wait();
+        console.log(tx)
 
-
+        if(tx !== null) {
+            return tx;
+        }
     } catch (error) {
         console.log(error);
     }

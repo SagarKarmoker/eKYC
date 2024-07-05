@@ -332,15 +332,15 @@ app.post("/getWalletAddress", async (req, res) => {
 });
 
 //testapi
-app.post("/demo", async (req, res) => {
-  try {
-    const { ipfsHash, nid } = req.body;
-    const response = await submitKYC(ipfsHash, nid)
-    res.status(200).json(response);
-  } catch (error) {
-    console.log(error)
-  }
-});
+// app.post("/demo", async (req, res) => {
+//   try {
+//     const { ipfsHash, nid } = req.body;
+//     const response = await submitKYC(ipfsHash, nid)
+//     res.status(200).json(response);
+//   } catch (error) {
+//     console.log(error)
+//   }
+// });
 
 app.post("/submitKYC", async (req, res) => {
   try {
@@ -349,19 +349,12 @@ app.post("/submitKYC", async (req, res) => {
     
     console.log(ipfsHash, nid, address);
 
-    // ipfsHash, nid, proof, newRoot
-    if (
-      ipfsHash === undefined ||
-      nid === undefined ||
-      proof === undefined ||
-      root === undefined
-    ) {
+    if (ipfsHash === undefined || nid === undefined ) {
       console.log(ipfsHash, nid, address);
     } else {
       // TODO: working on this
       const tx = await submitKYC(ipfsHash, nid);
-      console.log(tx);
-      res.status(201).json(tx.hash);
+      res.status(201).json(tx);
     }
   } catch (error) {
     res.status(500).json({ error: "Error submit kyc", error });
