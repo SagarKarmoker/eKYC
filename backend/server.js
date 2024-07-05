@@ -10,7 +10,7 @@ const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
 
 // Smart contract functions
-const { createWallet, getWalletAddress } = require("./utils/wallet");
+const { createWallet, getWalletAddress, submitKYC } = require("./utils/wallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -331,17 +331,23 @@ app.post("/getWalletAddress", async (req, res) => {
   }
 });
 
+//testapi
+app.post("/demo", async (req, res) => {
+  try {
+    const { ipfsHash, nid } = req.body;
+    const response = await submitKYC(ipfsHash, nid)
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error)
+  }
+});
+
 app.post("/submitKYC", async (req, res) => {
   try {
     const { ipfsHash, nid } = req.body; // element means nid against wallet
     const address = await getWalletAddress(nid);
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    const proof = await generateProof(tree, address[0].toLowerCase()).map(
-      bufferToHex
-    );
-
-    console.log(ipfsHash, nid, proof, root);
+    
+    console.log(ipfsHash, nid, address);
 
     // ipfsHash, nid, proof, newRoot
     if (
@@ -350,9 +356,10 @@ app.post("/submitKYC", async (req, res) => {
       proof === undefined ||
       root === undefined
     ) {
-      console.log(ipfsHash, nid, proof, root);
+      console.log(ipfsHash, nid, address);
     } else {
-      const tx = await submitKYC(ipfsHash, nid, proof, root);
+      // TODO: working on this
+      const tx = await submitKYC(ipfsHash, nid);
       console.log(tx);
       res.status(201).json(tx.hash);
     }
