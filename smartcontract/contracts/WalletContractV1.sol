@@ -4,12 +4,27 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
+/**
+ * @title WalletContract
+ * @author Sagar Karmoker
+ * @notice updated with Interface IWalletContract
+ * @dev WalletContract contract hold the nid and wallet shard3 mapping.
+ * @dev Current version: V2
+ */
+
+interface IWalletContract {
+    function registerWalletOwner(uint _nid, address _walletOwner) external;
+}
+
 contract WalletContract is Initializable {
     address public deployer;
     address[] public admins;
 
     // nid => shard3
     mapping (uint => string) public wallets;
+
+    // Intance of WalletContract
+    IWalletContract public walletContract;
 
     function initialize(address _deployer) public initializer {
         deployer = _deployer;
@@ -53,5 +68,14 @@ contract WalletContract is Initializable {
 
     function updateWallet(uint _nid, string memory _shard3) public onlyDeployerOrAdmins {
         wallets[_nid] = _shard3;
+    }
+
+    // external function calling
+    function setWalletContract(address _walletContract) external onlyDeployer {
+        walletContract = IWalletContract(_walletContract);
+    }
+
+    function registerWalletOwner(uint _nid, address _walletOwner) external onlyDeployerOrAdmins {
+        walletContract.registerWalletOwner(_nid, _walletOwner);
     }
 }

@@ -1,26 +1,20 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-/* 
-    This contract will be interacted through CitizenWallet (user wallet) and Financial Institution (FI) wallet.
+/**
+ * @title KYCRegistryV2
+ * @author Sagar Karmoker
+ * @notice Deployed KYCRegistry contract
+ * @dev KYCRegistry contract hold the KYC data and verification status.
+ * @dev Current version: V2
+ * @dev This contract is deployed and used by WalletContractV1 contract.
+ * @dev WalletContractV1 contract hold the nid and wallet shard3 mapping.
+ */
 
-    CitizenWallet (user wallet) => SC wallet
-    Financial Institution (FI) wallet => EOA wallet
+import "./WalletContractV1.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-*/
-
-import "./CitizenWallet.sol";
-import "./CitizenWalletFactory.sol";
-
-interface ICitizenWalletFactory {
-    function Citizens(uint _NID) external view returns (address);
-}
-
-// interface ICitizenWallet{
-//     function submitKYC(string memory _ipfsHash, uint _nid) external;
-// }
-
-contract KYCRegistryOld {
+contract KYCRegistry is Initializable {
     address public authority;
 
     // Structure to hold KYC data reference
@@ -42,7 +36,11 @@ contract KYCRegistryOld {
     // Granted access to verifier
     mapping(address => address[]) public userGrantedAccess;
 
-    constructor(){
+    // Track of wallet owner 
+    mapping(uint => address) public walletOwner;
+
+    // one time call
+    function initialize() public initializer {
         authority = msg.sender;
     }
 
@@ -85,11 +83,19 @@ contract KYCRegistryOld {
         return kycData[_user][latest-1];
     }
 
+    // Reg the wallet owner
+    function registerWalletOwner(uint _nid, address _walletOwner) external onlyAuthority {
+        walletOwner[_nid] = _walletOwner;
+    }
+
+    // Update the wallet owner
+    function updateWalletOwner(uint _nid, address _walletOwner) public onlyAuthority {
+        walletOwner[_nid] = _walletOwner;
+    }
+
     // Submit KYC data
-    function submitKYC(string memory _ipfsHash, uint _nid, address factoryAdd) public {
-        ICitizenWalletFactory citizenWalletFactoryIntance = ICitizenWalletFactory(factoryAdd);
-        address isCitizen = citizenWalletFactoryIntance.Citizens(_nid);
-        require(isCitizen == msg.sender, "User not found");
+    function submitKYC(string memory _ipfsHash, uint _nid) public {
+        require(walletOwner[_nid] == msg.sender, "Not authorized to submit KYC data");
         kycData[msg.sender].push(KYCData(_ipfsHash, false, block.timestamp));
         emit KYCSubmitted(msg.sender, _ipfsHash);
     }

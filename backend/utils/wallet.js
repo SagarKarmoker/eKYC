@@ -70,6 +70,39 @@ const getWalletAddress = (nid) => {
     return ShardKey.findOne({ nidNumber: nid }).select('address').exec();
 }
 
+const decryptShard = async (shardKey, password) => {
+    try {
+        // Retrieve encryptedShard3 from the blockchain
+        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, provider);
+        const encryptedShard3 = await contract.getWallet(nid);
+
+        if (!encryptedShard3) {
+            throw new Error('Shard3 not found on the blockchain for the given NID');
+        }
+
+        // Decrypt shardB and shard3
+        const shardBDecrypted = CryptoJS.AES.decrypt(shardKey.shardB, "ekycdev").toString(CryptoJS.enc.Utf8);
+        const shard3Decrypted = CryptoJS.AES.decrypt(encryptedShard3, password).toString(CryptoJS.enc.Utf8);
+
+        // Convert decrypted shards to buffers
+        const shard1 = Buffer.from(shardKey.shardA, 'hex');
+        const shard2 = Buffer.from(shardBDecrypted, 'hex');
+        const shard3 = Buffer.from(shard3Decrypted, 'hex');
+
+        // Combine shards to retrieve the original secret (private key)
+        const secret = sss.combine([shard1, shard3]); // Combine shard1 and shard3
+
+        // Validate the combined secret
+        if (!secret || secret.length !== 32) {
+            throw new Error('Invalid combined secret length');
+        }
+
+        return secret;
+    } catch (error) {
+        return error;
+    }
+}
+
 //TODO: cooking... 🧑‍🍳
 // Kyc data submit
 const submitKYC = async (ipfsHash, nid) => {
@@ -81,37 +114,13 @@ const submitKYC = async (ipfsHash, nid) => {
             throw new Error('ShardKey not found for the given NID');
         }
 
-        // Retrieve encryptedShard3 from the blockchain
-        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, provider);
-        const encryptedShard3 = await contract.getWallet(nid);
+        // decrypt shard
+        const secret = await decryptShard(shardKey, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
 
-        if (!encryptedShard3) {
-            throw new Error('Shard3 not found on the blockchain for the given NID');
-        }
-
-        // Decrypt shardB and shard3
-        const shardBDecrypted = CryptoJS.AES.decrypt(shardKey.shardB, "ekycdev").toString(CryptoJS.enc.Utf8);
-        const shard3Decrypted = CryptoJS.AES.decrypt(encryptedShard3, "1234").toString(CryptoJS.enc.Utf8);
-
-        // Convert decrypted shards to buffers
-        const shard1 = Buffer.from(shardKey.shardA, 'hex');
-        const shard2 = Buffer.from(shardBDecrypted, 'hex');
-        const shard3 = Buffer.from(shard3Decrypted, 'hex');
-
-        // Combine shards to retrieve the original secret (private key)
-        const secret = sss.combine([shard1, shard2, shard3]);
-
-        // Validate the combined secret
-        if (!secret || secret.length !== 32) {
-            throw new Error('Invalid combined secret length');
-        }
-
-        // Create a wallet instance using the recovered private key
-        const wallet = new ethers.Wallet(secret, provider);
-        const walletAddress = wallet.address;
-
-        console.log(walletAddress);
-        return walletAddress;
+        // Send the transaction to store the KYC data on the blockchain
+        
 
     } catch (error) {
         console.log(error);
