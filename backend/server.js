@@ -10,7 +10,7 @@ const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
 
 // Smart contract functions
-const { createWallet, getWalletAddress, submitKYC } = require("./utils/wallet");
+const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess } = require("./utils/wallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -352,7 +352,6 @@ app.post("/submitKYC", async (req, res) => {
     if (ipfsHash === undefined || nid === undefined ) {
       console.log(ipfsHash, nid, address);
     } else {
-      // TODO: working on this
       const tx = await submitKYC(ipfsHash, nid);
       res.status(201).json(tx);
     }
@@ -364,16 +363,7 @@ app.post("/submitKYC", async (req, res) => {
 app.post("/grantVerifier", async (req, res) => {
   try {
     const { verifier, nid } = req.body; // element means nid against wallet
-    console.log(verifier, nid);
-    const address = await getWalletAddress(nid);
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    const proof = await generateProof(tree, address[0].toLowerCase()).map(
-      bufferToHex
-    );
-
-    // verifier, nid, proof, newRoot
-    const tx = await grantAccess(verifier, nid, proof, root);
+    const tx = await grantAccess(nid, verifier);
     console.log(tx);
     res.status(201).json(tx.hash);
   } catch (error) {
@@ -384,17 +374,9 @@ app.post("/grantVerifier", async (req, res) => {
 app.post("/revokeVerifier", async (req, res) => {
   try {
     const { verifier, nid } = req.body; // element means nid against wallet
-    const address = await getWalletAddress(nid);
-    const walletAddresses = await getAllWallets();
-    const { root, tree } = createMerkleTree(walletAddresses);
-    const proof = await generateProof(tree, address[0].toLowerCase()).map(
-      bufferToHex
-    );
-
-    // verifier, nid, proof, newRoot
-    const tx = await revokeAccess(verifier, nid, proof, root);
+    const tx = await revokeAccess(nid, verifier);
     console.log(tx);
-    res.status(201).json({ message: proof });
+    res.status(201).json(tx.hash);
   } catch (error) {
     res.status(500).json({ error: "Error while revoke verifier", error });
   }

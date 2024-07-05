@@ -71,8 +71,16 @@ const getWalletAddress = (nid) => {
     return ShardKey.findOne({ nidNumber: nid }).select('address').exec();
 }
 
-const decryptShard = async (shardKey, password) => {
+const decryptShard = async (nid, password) => {
     try {
+        // Retrieve shards from the database
+        const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
+        console.log(shardKey)
+
+        if (!shardKey) {
+            throw new Error('ShardKey not found for the given NID');
+        }
+
         // Retrieve encryptedShard3 from the blockchain
         const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, provider);
         const encryptedShard3 = await contract.getWallet(shardKey.nidNumber);
@@ -104,20 +112,12 @@ const decryptShard = async (shardKey, password) => {
     }
 }
 
-//TODO: cooking... 🧑‍🍳
+
 // Kyc data submit
 const submitKYC = async (ipfsHash, nid) => {
     try {
-        // Retrieve shards from the database
-        const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
-        console.log(shardKey)
-
-        if (!shardKey) {
-            throw new Error('ShardKey not found for the given NID');
-        }
-
         // decrypt shard
-        const secret = await decryptShard(shardKey, "1234");
+        const secret = await decryptShard(nid, "1234");
         const signer = new ethers.Wallet(secret, provider);
         const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
 
@@ -137,6 +137,50 @@ const submitKYC = async (ipfsHash, nid) => {
 }
 
 
+const grantAccess = async (nid, verifierAddress) => {
+    try {
+        // decrypt shard
+        const secret = await decryptShard(nid, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
+
+        // Send the transaction to store the KYC data on the blockchain
+        const tx = await contract.grantAccess(verifierAddress, {
+            gasPrice: 0
+        });
+        await tx.wait();
+        console.log(tx)
+
+        if(tx !== null) {
+            return tx;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
+const revokeAccess = async (nid, verifierAddress) => {
+    try {
+        // decrypt shard
+        const secret = await decryptShard(nid, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
+
+        // Send the transaction to store the KYC data on the blockchain
+        const tx = await contract.revokeAccess(verifierAddress, {
+            gasPrice: 0
+        });
+        await tx.wait();
+        console.log(tx)
+
+        if(tx !== null) {
+            return tx;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
 
 // export the function
-module.exports = { createWallet, getWalletAddress, submitKYC }
+module.exports = { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess }
