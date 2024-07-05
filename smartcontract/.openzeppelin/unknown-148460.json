@@ -1,0 +1,118 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0xdb2858E497F1976e956F9f625237FFcCb6B57E3E",
+      "txHash": "0xd7e64ba9357f884682fe7ba9af328b6a32c36c1b561f34e1400997ee39a8258f",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x956d2836B50A63D635932E7F388DC79ba5f7dcD9",
+      "txHash": "0x5b0700fcceca26ebde4fa5c14e3b142a8892e8458a171048e581dc3d4243de97",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "364a6d1c9741047ee675a73493372292af38a2a48dfa766201b4d4f02ca6e4fc": {
+      "address": "0x5fd189a5692271Dc460568892A71B5180ea0C0A2",
+      "txHash": "0x865bb2d88db7c50bc3d8921a33eb312224cecb35e3000b0e9f2d3f2b5a831a47",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "deployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "WalletContract",
+            "src": "contracts\\WalletContractV1.sol:8"
+          },
+          {
+            "label": "admins",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "WalletContract",
+            "src": "contracts\\WalletContractV1.sol:9"
+          },
+          {
+            "label": "wallets",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_mapping(t_uint256,t_string_storage)",
+            "contract": "WalletContract",
+            "src": "contracts\\WalletContractV1.sol:12"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)10_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_string_storage)": {
+            "label": "mapping(uint256 => string)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

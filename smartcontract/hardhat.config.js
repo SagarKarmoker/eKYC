@@ -8,8 +8,9 @@ module.exports = {
     hardhat: {
     },
     custom: {
-      url: "https://u0ewfv1t3k:kFp45c6UAJuM3oWlT7a4Y40mSgBBNWu7jz4oLbQgT3Y@u0ukbezxf3-u0ob9kqev6-rpc.us0-aws.kaleido.io/",
-      accounts: ["de80c5713520dfff769b441de6a941107e4f1c05fa98851c7136daea184193b6"]
+      url: "http://129.154.245.79:8545",
+      accounts: ["de80c5713520dfff769b441de6a941107e4f1c05fa98851c7136daea184193b6"],
+      gasPrice: 0
     }
   },
   solidity: "0.8.24",
