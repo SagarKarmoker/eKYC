@@ -6,21 +6,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./models/userModel");
 const nid = require("./models/nidModel");
-const shardKey = require("./models/shardKeyModel");
-
-const {
-  regUser,
-  getUsers,
-  createWallet,
-  getWalletAddress,
-  getAllWallets,
-  submitKYC,
-  grantAccess,
-  revokeAccess,
-} = require("./smartcontract");
-const { createMerkleTree, generateProof, verifyProof } = require("./proof");
 const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
+
+// Smart contract functions
+const { createWallet } = require("./utils/wallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -96,12 +86,6 @@ app.post("/register", async (req, res) => {
       role,
     });
     await newUser.save();
-
-    // smart contract part
-    const phoneHash = await bcrypt.hash(phoneNumber, 10);
-    const recoveryHash = await bcrypt.hash(phoneNumber, 10);
-    const tx = await regUser(phoneHash, hashedPassword, recoveryHash);
-    console.log(tx);
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -324,10 +308,13 @@ app.post("/login", async (req, res) => {
 // SMART CONTRACT PART
 app.post("/createWallet", async (req, res) => {
   try {
-    const { nid, merkleRoot } = req.body;
-    const tx = await createWallet(nid, merkleRoot);
-    console.log(tx);
-    res.status(201).json({ message: "Wallet created successfully" });
+    const { nid, password } = req.body;
+    console.log(nid, password)
+    const {walletAddress, shard} = await createWallet(nid, password);
+    console.log(walletAddress, shard);
+    if(walletAddress != null && shard != null){
+      res.status(201).json({ walletAddress, shard });
+    }
   } catch (error) {
     res.status(500).json({ error: "Error creating wallet" });
   }

@@ -6,5 +6,5 @@ const shardKeySchema = new mongoose.Schema({
 }, 
 {timestamps: true});
 
-const shardKey = mongoose.model("ShardKey", shardKeySchema);
-module.exports = { shardKey };
+const ShardKey = mongoose.model("ShardKey", shardKeySchema);
+module.exports = ShardKey;

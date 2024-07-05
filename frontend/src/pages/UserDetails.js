@@ -14,6 +14,9 @@ function UserDetails() {
   const [bloodGroup, setBloodGroup] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // verify user pass
+  const [password, setPassword] = useState("");
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -43,10 +46,52 @@ function UserDetails() {
       });
   }, [nidNumber]);
 
+  const verifyPass = async () => {
+    try {
+      Swal.fire({
+        title: "Enter your password",
+        input: "text",
+        inputPlaceholder:
+          "Enter your password to verify your identity and complete the registration process",
+        inputAttributes: {
+          autocapitalize: "off",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Verify",
+        showLoaderOnConfirm: true,
+        preConfirm: (password) => {
+          setPassword(password);
+          return axios
+            .post(`http://localhost:3001/verifyPass`, {
+              nid: nidNumber,
+              password: password,
+            })
+            .then((response) => {
+              if (response.data.success) {
+                return response.data;
+              } else {
+                throw new Error(response.data.message);
+              }
+            })
+            .catch((error) => {
+              Swal.showValidationMessage(`Error: ${error}`);
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to verify password",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  }
+
   const getKYCWallet = async () => {
     try {
-      // const root = await axios.get(`http://localhost:3001/generateTree`);
-      const root = "0x4f9029d5982c35730a4d8e22b48c756b84384880e4a48fa88859a28e95f9e0ad";
       console.log(nidNumber);
       if (nidNumber) {
         console.log(nidNumber);
@@ -54,7 +99,7 @@ function UserDetails() {
           `http://localhost:3001/createWallet`,
           {
             nid: nidNumber,
-            merkleRoot: root,
+            password: "1234", // verify password
           }
         );
         console.log(response.data);
@@ -202,7 +247,7 @@ function UserDetails() {
                     type="button"
                     onClick={getKYCWallet}
                   >
-                    Next
+                    Complete KYC
                   </button>
                 </form>
               )}
