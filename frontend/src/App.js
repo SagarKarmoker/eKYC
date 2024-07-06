@@ -12,6 +12,7 @@ import My from "./pages/My";
 import VerifiedUserListPage from "./pages/VerifiedUserListPage";
 import UploadNID from "./pages/UploadNID";
 import BlockListPage from "./pages/BlockList";
+import History from "./pages/History";
 
 function App() {
   const isUserSignedIn = !!localStorage.getItem("token");
@@ -36,6 +37,7 @@ function App() {
         )}
         {isUserSignedIn && <Route path="/approved" element={<Approved />} />}
         {isUserSignedIn && <Route path="/my" element={<My />} />}
+        {isUserSignedIn && <Route path="/history" element={<History />} />}
       </Routes>
     </div>
   );

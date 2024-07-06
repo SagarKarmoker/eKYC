@@ -10,7 +10,9 @@ const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
 
 // Smart contract functions
-const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess } = require("./utils/wallet");
+const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
+  getAllTransactions
+ } = require("./utils/wallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -379,5 +381,19 @@ app.post("/revokeVerifier", async (req, res) => {
     res.status(201).json(tx.hash);
   } catch (error) {
     res.status(500).json({ error: "Error while revoke verifier", error });
+  }
+});
+
+// TODO: Implementing this endpoint
+app.post("/getAllTxs", async (req, res) => {
+  try {
+    const { nid } = req.body; // element means nid against wallet
+    const address = await getWalletAddress(nid);
+    //console.log(address.address)
+    const txs = await getAllTransactions(address.address);
+
+    res.status(200).json(txs);
+  } catch (error) {
+    res.status(500).json({ error: "No address found", error });
   }
 });

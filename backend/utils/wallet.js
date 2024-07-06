@@ -6,6 +6,7 @@ const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistry.json')
+const axios = require('axios');
 
 // user->shard1 (browser)
 // nid->shard2 (kms)
@@ -66,9 +67,10 @@ const createWallet = async (nid, password) => {
 }
 
 
-const getWalletAddress = (nid) => {
+const getWalletAddress = async (nid) => {
     // Return the wallet address to the user
-    return ShardKey.findOne({ nidNumber: nid }).select('address').exec();
+    const address = await ShardKey.findOne({ nidNumber: nid }).select('address').exec();
+    return address;
 }
 
 const decryptShard = async (nid, password) => {
@@ -128,7 +130,7 @@ const submitKYC = async (ipfsHash, nid) => {
         await tx.wait();
         console.log(tx)
 
-        if(tx !== null) {
+        if (tx !== null) {
             return tx;
         }
     } catch (error) {
@@ -151,7 +153,7 @@ const grantAccess = async (nid, verifierAddress) => {
         await tx.wait();
         console.log(tx)
 
-        if(tx !== null) {
+        if (tx !== null) {
             return tx;
         }
     } catch (error) {
@@ -173,7 +175,7 @@ const revokeAccess = async (nid, verifierAddress) => {
         await tx.wait();
         console.log(tx)
 
-        if(tx !== null) {
+        if (tx !== null) {
             return tx;
         }
     } catch (error) {
@@ -181,6 +183,20 @@ const revokeAccess = async (nid, verifierAddress) => {
     }
 }
 
+// TODO: Get all transactions for a given wallet address
+const getAllTransactions = async (walletAddress) => {
+    try {
+        //const add = "0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8" // tested ok
+        const response = await axios.get(`http://localhost:3123/alltx/${walletAddress}`);
+        console.log(response.data)
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
 
 // export the function
-module.exports = { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess }
+module.exports = {
+    createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
+    getAllTransactions
+}

@@ -23,7 +23,8 @@ function Navbar() {
                 className="block h-12 w-auto"
                 src="./taxation.png"
                 alt="Taxation"
-              />
+              /> 
+              <p className="pl-3 text-2xl font-bold">eKYC</p>
             </Link>
           </div>
           <div className="">
@@ -45,6 +46,9 @@ function Navbar() {
                           </Link>
                           <Link to="/my">
                             <li className="hover:underline">My KYC</li>
+                          </Link>
+                          <Link to="/history">
+                            <li className="hover:underline">History</li>
                           </Link>
                         </>
                       )}
