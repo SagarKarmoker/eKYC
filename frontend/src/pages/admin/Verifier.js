@@ -18,7 +18,8 @@ function Verifier() {
     const toast = useToast()
     const [verifier, setVerifier] = useState('')
     const [verifiers, setVerifiers] = useState([])
-    const [isloading, setIsLoading] = useState(false)
+    const [isAddingVerifier, setIsAddingVerifier] = useState(false)
+    const [isDeletingVerifier, setIsDeletingVerifier] = useState(false)
 
     const handleAddVerifier = async () => {
         try {
@@ -29,14 +30,14 @@ function Verifier() {
                 duration: 9000,
                 isClosable: true,
             })
-            setIsLoading(true)
+            setIsAddingVerifier(true)
             const res = await axios.post('http://localhost:3001/addVerifier', {
                 verifier
             })
             console.log(res.data)
             if (res.data.status) {
                 setVerifier('')
-                setIsLoading(false)
+                setIsAddingVerifier(false)
                 toast({
                     title: 'Verifier added.',
                     description: "We've added verifier.",
@@ -47,7 +48,7 @@ function Verifier() {
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
+            setIsAddingVerifier(false)
             // show toast
             toast({
                 title: 'Error',
@@ -68,13 +69,13 @@ function Verifier() {
                 duration: 9000,
                 isClosable: true,
             })
-            setIsLoading(true)
+            setIsDeletingVerifier(true)
             const res = await axios.post('http://localhost:3001/removeVerifier', {
                 verifier
             })
             console.log(res.data)
             if (res.data.status) {
-                setIsLoading(false)
+                setIsDeletingVerifier(false)
                 setVerifier('')
                 toast({
                     title: 'Verifier removed.',
@@ -86,7 +87,7 @@ function Verifier() {
             }
         } catch (error) {
             console.log(error)
-            setIsLoading(false)
+            setIsDeletingVerifier(false)
             // show toast
             toast({
                 title: 'Error',
@@ -124,7 +125,7 @@ function Verifier() {
                             <div className='flex flex-col'>
                                 <label className='text-lg font-medium'>Add Verifier</label>
                                 <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
-                                <Button onClick={handleAddVerifier} className='w-full mt-2 p-2 bg-blue-500 text-white rounded-md' isLoading={isloading}
+                                <Button onClick={handleAddVerifier} className='w-full mt-2 p-2 bg-blue-500 text-white rounded-md' isLoading={isAddingVerifier}
                                     loadingText='Submitting'
                                     colorScheme='green'
                                     variant='solid'
@@ -137,7 +138,7 @@ function Verifier() {
                                 <label className='text-lg font-medium'>Delete Verifier</label>
                                 <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
                                 <Button onClick={handleDeleteVerifier} className='w-full mt-2 p-2 bg-red-500 text-white rounded-md'
-                                isLoading={isloading}
+                                isLoading={isDeletingVerifier}
                                 loadingText='Submitting'
                                 colorScheme='red'
                                 variant='solid'
