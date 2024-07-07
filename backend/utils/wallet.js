@@ -132,7 +132,7 @@ const submitKYC = async (ipfsHash, nid) => {
         console.log(tx)
 
         if (tx !== null) {
-            await saveTxDataForWallet(tx, nid);
+            await saveTxDataForWallet(tx, nid, "KYC Submission or Update");
             return tx;
         }
     } catch (error) {
@@ -155,7 +155,7 @@ const grantAccess = async (nid, verifierAddress) => {
         console.log(tx)
 
         if (tx !== null) {
-            await saveTxDataForWallet(tx, nid);
+            await saveTxDataForWallet(tx, nid, `Access Granted to Verifier ${verifierAddress}`);
             return tx;
         }
     } catch (error) {
@@ -178,7 +178,7 @@ const revokeAccess = async (nid, verifierAddress) => {
         console.log(tx)
 
         if (tx !== null) {
-            await saveTxDataForWallet(tx, nid);
+            await saveTxDataForWallet(tx, nid, `Access Revoked to Verifier ${verifierAddress}`);
             return tx;
         }
     } catch (error) {
@@ -189,19 +189,24 @@ const revokeAccess = async (nid, verifierAddress) => {
 // TODO: Get all transactions for a given wallet address
 const getAllTransactions = async (walletAddress) => {
     try {
-        //const add = "0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8" // tested ok
-        const response = await axios.get(`http://localhost:3123/alltx/${walletAddress}`);
-        console.log(response.data)
-        return response;
+        const transactions = await Transaction.find({
+            $or: [
+              { to: walletAddress },
+              { from: walletAddress }
+            ]
+          }).exec();
+
+        return transactions;
     } catch (error) {
         return error;
     }
 }
 
-const saveTxDataForWallet = async (tx, nid) => {
+const saveTxDataForWallet = async (tx, nid, reason) => {
     try {
         const transaction = new Transaction({
             nid: nid,
+            reason: reason,
             nonce: tx.nonce,
             gasPrice: tx.gasPrice.toString(),
             gasLimit: tx.gasLimit.toString(),

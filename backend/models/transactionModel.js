@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const transactionSchema = new Schema({
     nid: { type: String, required: true },
+    reason: { type: String, required: true },
     nonce: { type: Number, required: true },
     gasPrice: { type: String, required: true },  // Storing BigNumber as a string
     gasLimit: { type: String, required: true },  // Storing BigNumber as a string

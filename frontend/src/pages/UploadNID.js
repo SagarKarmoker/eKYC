@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function UploadNID() {
   const [file, setFile] = useState();
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -32,6 +34,7 @@ function UploadNID() {
             console.log("Alert closed after 5 seconds");
           },
         });
+        navigate("/history"); //TODO: Redirect to the history page not working
       })
       .catch((error) => {
         console.error(error);
