@@ -30,13 +30,13 @@ function Verified() {
         try {
             if (!citizenAddr) return toast({
                 title: 'Error',
-                description: "Please enter verifier address.",
+                description: "Please enter address.",
                 status: 'error',
                 duration: 9000,
                 isClosable: true,
             })
             setIsAddr(true)
-            const res = await axios.post('http://localhost:3001/orgGrantAccess', { // TODO: Cooking ⚠️
+            const res = await axios.post('http://localhost:3001/orgKycDataByAddress', { // TODO: Cooking ⚠️
                 citizenAddr
             })
             console.log(res.data)
@@ -44,8 +44,8 @@ function Verified() {
                 setCitizenAddr('')
                 setIsAddr(false)
                 toast({
-                    title: 'Verifier added.',
-                    description: "We've added verifier.",
+                    title: 'Success',
+                    description: "We've got the details.",
                     status: 'success',
                     duration: 9000,
                     isClosable: true,
@@ -69,23 +69,33 @@ function Verified() {
         try {
             if (!nid) return toast({
                 title: 'Error',
-                description: "Please enter verifier address.",
+                description: "Please enter NID.",
                 status: 'error',
                 duration: 9000,
                 isClosable: true,
             })
             setIsNID(true)
-            const res = await axios.post('http://localhost:3001/removeVerifier', {
+            const {kycData} = await axios.post('http://localhost:3001/removeVerifier', {
                 nid
             })
-            console.log(res.data)
-            if (res.data.status) {
+            console.log(kycData)
+            // if (kycData) {
+            //     setIsNID(false)
+            //     setNid('')
+            //     toast({
+            //         title: 'Success',
+            //         description: "We've got the details.",
+            //         status: 'success',
+            //         duration: 9000,
+            //         isClosable: true,
+            //     })
+            // }
+            if(kycData.reason === 'Verifier not found in list'){
                 setIsNID(false)
-                setNid('')
                 toast({
-                    title: 'Verifier removed.',
-                    description: "We've removed verifier.",
-                    status: 'success',
+                    title: 'Error',
+                    description: "Verifier not found in list.",
+                    status: 'error',
                     duration: 9000,
                     isClosable: true,
                 })

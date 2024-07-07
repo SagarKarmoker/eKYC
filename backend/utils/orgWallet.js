@@ -45,16 +45,24 @@ const orgGrantAccessAddresses = async (orgAddress) => {
     }
 }
 
+// TODO: Cooking ⚠️
 const getKYCUsingAddr = async (address) => {
     try {
         const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
-        const kyc = await contract.getKYC(address);
-        return kyc;
+        const kyc = await contract.getKYCData(address);
+        console.log(kyc)
+        if (kyc.reason == 'Verifier not found in list'){
+            return {status: false, message: 'Verifier not found in list'}
+        }
+        else{
+            return kyc
+        }
     } catch (error) {
         return error;
     }
 }
 
+// TODO: Cooking ⚠️
 const getKYCUsingNID = async (nid) => {
     try {
         const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
