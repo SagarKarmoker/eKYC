@@ -1,31 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoImg from '../img/taxSheildLogoTransparent.png'; // Import the login image
+import rightImg from '../img/homeBackground1.png'; // Import the login image
+import backgroundImage from '../img/homeBackground2.png'; // Import the background image
 
 function Home() {
   return (
-    <section className="flex flex-wrap items-center justify-between px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
-      {/* Left Section */}
-      <div className="w-full lg:w-1/2 mb-12">
-        <h1 className="text-xl font-bold leading-none tracking-tighter text-[#202020] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl mb-2">
-          TaxShieldBD
-        </h1>
-        <p className="max-w-xl mb-4 text-base leading-relaxed text-gray-500">
-          Welcome to TaxShieldBD, where we harness blockchain technology and E-KYC verification to revolutionize tax administration in Bangladesh, ensuring security, efficiency, and transparency.
-        </p>
-        <Link
-          to="/read-more"
-          className="inline-block px-4 py-2 text-sm font-semibold text-blue-600 hover:text-[#202020] border border-blue-600 rounded-md transition-colors duration-300"
-          title="Read more"
-        >
-          Read more »
-        </Link>
-      </div>
+    <section 
+      className="flex items-center w-full h-screen bg-cover bg-center" 
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <div className="flex flex-wrap items-center justify-between w-full px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24 bg-transparent bg-opacity-70 rounded-lg">
+        {/* Left Section */}
+        <div className="w-full lg:w-1/2 mb-12 lg:mb-0 text-left">
+          <h1 className="text-xl font-bold leading-none tracking-tighter text-[#202020] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl mb-2">
+            TaxShieldBD
+          </h1>
+          <p className="max-w-xl mb-10 text-base leading-relaxed text-gray-500">
+            Welcome to TaxShieldBD, where we harness blockchain technology and E-KYC verification to revolutionize tax administration in Bangladesh, ensuring security, efficiency, and transparency.
+          </p>
+          <Link
+            to="/read-more"
+            className="w-full px-3 py-2 mb-5 text-m font-bold bg-[#ff735c] text-[#f5f5f5] hover:text-[#ff735c] transition duration-300 md:w-96 rounded-2xl border-transparent border-2 hover:bg-transparent hover:border-[#ff735c]"
+            title="Read more"
+          >
+            Read more »
+          </Link>
+        </div>
 
-      {/* Right Section */}
-      <div className="w-full lg:w-1/2 mb-4 lg:mb-0">
-        <div className="flex justify-center">
-          <img src={logoImg} alt="TaxShieldBD Logo" className="w-80 h-80 mx-auto" />
+        {/* Right Section */}
+        <div className="w-full lg:w-1/2 mb-4 lg:mb-0 hidden lg:flex justify-center lg:justify-end">
+          <img src={rightImg} alt="TaxShieldBD" className="w-full lg:w-auto h-auto lg:h-82" />
         </div>
       </div>
     </section>
@@ -33,6 +37,9 @@ function Home() {
 }
 
 export default Home;
+
+
+
 
 
 
