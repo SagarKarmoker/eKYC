@@ -14,14 +14,21 @@ function Account() {
     console.log("Account Page");
     try {
       const nidNumber = localStorage.getItem("nidNumber");
-      // console.log("NID Number before:", nidNumber);
-      if (nidNumber) {
+      console.log("NID Number before:", nidNumber);
+      if (nidNumber !== "undefined") {
         console.log("NID Number: after", nidNumber);
         const response = await axios.post(`http://localhost:3001/getWalletAddress`, {
           nidNumber: nidNumber,
         });
         setWalletAddress(response.data);
         console.log("User Wallet Address:", response);
+      }
+      else{
+        if(userRole === "Org"){
+          setWalletAddress("Complete your Org profile to get wallet address");
+        }else{
+          setWalletAddress("Complete your KYC profile to get wallet address");
+        }
       }
     } catch (error) {
       console.error("Error getting user address", error);

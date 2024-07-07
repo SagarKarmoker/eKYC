@@ -344,7 +344,12 @@ app.post("/getWalletAddress", async (req, res) => {
     const { nidNumber } = req.body;
     // console.log(nidNumber)
     const walletAddress = await getWalletAddress(nidNumber);
-    res.status(200).json(walletAddress.address);
+    if(walletAddress != null){
+      res.status(200).json(walletAddress.address);
+    }
+    else{
+      res.status(404).json({ error: "No wallet address found" });
+    }
   } catch (error) {
     res.status(500).json({ error: "Unable to get wallet address" });
   }
