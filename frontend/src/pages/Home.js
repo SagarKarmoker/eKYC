@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import rightImg from '../img/homeBackground1.png'; // Import the login image
-import backgroundImage from '../img/homeBackground2.png'; // Import the background image
+import backgroundImage from '../img/loginBackground7.png'; // Import the background image
 
 function Home() {
   return (
