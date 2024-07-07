@@ -99,7 +99,7 @@ function UserDetails() {
           `http://localhost:3001/createWallet`,
           {
             nid: nidNumber,
-            password: "1234", // verify password
+            password: "1234", //TODO: verify password
           }
         );
         console.log(response.data);

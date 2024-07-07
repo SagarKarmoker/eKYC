@@ -11,6 +11,7 @@ function Navbar() {
   const handleSignOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("nidNumber");
     navigate("/login");
   };
 
@@ -66,6 +67,23 @@ function Navbar() {
                       </Link>
                       <Link to="/blockList">
                         <li className="hover:underline">Block List</li>
+                      </Link>
+                    </>
+                  )}
+                  {/* TODO: Cooking */}
+                  {userRole === "Org" && (
+                    <>
+                      <Link to="/verifiedUserList">
+                        <li className="hover:underline">Verified Citizens</li>{" "}
+                      </Link>
+                      <Link to="/verifiedUserList">
+                        <li className="hover:underline">Blocked Citizens</li>
+                      </Link>
+                      <Link to="/blockList">
+                        <li className="hover:underline">Search Citizen</li>
+                      </Link>
+                      <Link to="/blockList">
+                        <li className="hover:underline">eKYC Data</li>
                       </Link>
                     </>
                   )}

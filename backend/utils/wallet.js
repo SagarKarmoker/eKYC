@@ -5,7 +5,7 @@ const { Buffer } = require('buffer');
 const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
-const KYCRegistryContract = require('../abis/KYCRegistry.json')
+const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
 const axios = require('axios');
 
 // user->shard1 (browser)

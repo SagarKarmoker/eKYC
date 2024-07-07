@@ -13,9 +13,11 @@ import VerifiedUserListPage from "./pages/VerifiedUserListPage";
 import UploadNID from "./pages/UploadNID";
 import BlockListPage from "./pages/BlockList";
 import History from "./pages/History";
+import Verified from "./pages/org/Verified";
 
 function App() {
   const isUserSignedIn = !!localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
   return (
     <div className="App">
       <Navbar />
@@ -27,7 +29,9 @@ function App() {
         {isUserSignedIn && <Route path="/Kyc" element={<Kyc />} />}
         {isUserSignedIn && <Route path="/uploadNID" element={<UploadNID />} />}
         {isUserSignedIn && (
-          <Route path="/verifiedUserList" element={<VerifiedUserListPage />} />
+          <Route path="/verifiedUserList" element={
+            userRole === "Admin" ? <VerifiedUserListPage /> : <Verified />
+          } />
         )}
         {isUserSignedIn && (
           <Route path="/blockList" element={<BlockListPage />} />

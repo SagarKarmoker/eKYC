@@ -103,7 +103,7 @@ contract KYCRegistry is Initializable {
     }
 
     // Grant access to a verifier
-    function grantAccess(address _verifier) public {
+    function grantAccess(address _verifier) public virtual {
         require(listOfVerifier[_verifier], "Verifier not found in list");
         verifierPermissions[msg.sender][_verifier] = true;
         userGrantedAccess[msg.sender].push(_verifier);
@@ -111,7 +111,7 @@ contract KYCRegistry is Initializable {
     }
 
     // Revoke access from a verifier
-    function revokeAccess(address _verifier) public {
+    function revokeAccess(address _verifier) public virtual {
         require(listOfVerifier[_verifier], "Verifier not found in list");
         verifierPermissions[msg.sender][_verifier] = false;
         emit VerifierAccessRevoked(msg.sender, _verifier);

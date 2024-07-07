@@ -4,6 +4,8 @@ import axios from "axios";
 function Account() {
   const [walletAddress, setWalletAddress] = useState("");
 
+  const userRole = localStorage.getItem("role");
+
   useEffect(() => {
     getWalletAddress();
   }, []);
@@ -32,12 +34,29 @@ function Account() {
       <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
         <div class="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
           <div class="flex items-center justify-center w-full lg:p-12">
-            <div class="flex flex-col items-center xl:p-10">
-              <h1 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
-                Account
-              </h1>
-              <p className="font-bold">Your wallet Address: <span className="font-normal">{walletAddress}</span></p>
-            </div>
+            {
+              userRole === "Taxpayer" && (
+                <>
+                  <div class="flex flex-col items-center xl:p-10">
+                    <h1 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
+                      Account
+                    </h1>
+                    <p className="font-bold">Your wallet Address: <span className="font-normal">{walletAddress}</span></p>
+                  </div></>
+              )
+            }
+
+            {
+              userRole === "Org" && (
+                <>
+                  <div class="flex flex-col items-center xl:p-10">
+                    <h1 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
+                      Welcome to Organization Account
+                    </h1>
+                    <p className="font-bold">Org wallet Address: <span className="font-normal">{walletAddress}</span></p>
+                  </div></>
+              )
+            }
           </div>
         </div>
       </div>

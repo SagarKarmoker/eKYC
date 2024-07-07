@@ -14,6 +14,8 @@ const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
   getAllTransactions
  } = require("./utils/wallet");
 
+const { orgGrantAccessAddresses } = require("./utils/orgWallet");
+
 const SECRET_KEY = "super-secret-key";
 
 const KycSchema = new mongoose.Schema({
@@ -325,7 +327,7 @@ app.post("/createWallet", async (req, res) => {
 app.post("/getWalletAddress", async (req, res) => {
   try {
     const { nidNumber } = req.body;
-    console.log(nidNumber)
+    // console.log(nidNumber)
     const walletAddress = await getWalletAddress(nidNumber);
     res.status(200).json(walletAddress.address);
   } catch (error) {
@@ -395,5 +397,16 @@ app.post("/getAllTxs", async (req, res) => {
     res.status(200).json(txs);
   } catch (error) {
     res.status(500).json({ error: "No address found", error });
+  }
+});
+
+// ORG PART
+app.post("/orgGrantAccess", async (req, res) => {
+  try {
+    const { orgAddress } = req.body;
+    const citizens = await orgGrantAccessAddresses(orgAddress);
+    res.status(200).json({citizens});
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching citizens", error });
   }
 });
