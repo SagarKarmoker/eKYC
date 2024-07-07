@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import loginImage from '../img/LoginEkyc.png'; // Import the login image
-import backgroundImage from '../img/loginBackground6.png'; // Import the background image
+import backgroundImage from '../img/loginBackground7.png'; // Import the background image
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -130,6 +130,7 @@ function Login() {
     </div>
   );
 }
+
 
 export default Login;
 
