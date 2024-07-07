@@ -2,7 +2,9 @@ require('dotenv').config();
 const { ethers } = require('ethers');
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
-const {saveTxDataForWallet} = require("./wallet");
+const { saveTxDataForWallet } = require("./wallet");
+const Verifier = require('../models/verifierAddress');
+const { where } = require('../models/userModel');
 
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
@@ -24,8 +26,19 @@ const addVerifier = async (verifierAddress) => {
         });
         await tx.wait();
 
-        if(tx !== null){
+        if (tx !== null) {
             await saveTxDataForWallet(tx, 0, `Verifier added ${verifierAddress}`);
+
+            const verifier = new Verifier({
+                orgName: "Verifier", // TODO: Add orgName in the request ⚠️
+                address: verifierAddress,
+                isActivated: true,
+                hash: tx.hash,
+                addedOn: Date.now()
+            });
+
+            await verifier.save();
+
             return {
                 status: true,
                 message: "Verifier added successfully"
@@ -48,8 +61,9 @@ const removeVerifier = async (verifierAddress) => {
         });
         await tx.wait();
 
-        if(tx !== null){
+        if (tx !== null) {
             await saveTxDataForWallet(tx, 0, `Verifier removed ${verifierAddress}`);
+            await Verifier.updateOne({ address: verifierAddress }, { isActivated: false, hash: tx.hash });
             return {
                 status: true,
                 message: "Verifier added successfully"
@@ -60,6 +74,15 @@ const removeVerifier = async (verifierAddress) => {
     }
 }
 
+const getAllVerifierList = async () => {
+    try {
+        const verifierList = await Verifier.find({ isActivated: true });
+        return verifierList;
+    } catch (error) {
+        return error;
+    }
+}
+
 module.exports = {
-    addVerifier, removeVerifier
+    addVerifier, removeVerifier, getAllVerifierList
 }

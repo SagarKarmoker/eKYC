@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
     Button, useToast,
     Divider, Center,
@@ -98,6 +98,19 @@ function Verifier() {
         }
     }
 
+    useEffect(() => {
+        const fetchVerifiers = async () => {
+            try {
+                const res = await axios.post('http://localhost:3001/getAllVerifiers')
+                console.log(res.data)
+                setVerifiers(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchVerifiers()
+    },[])
+
     return (
         <div className='flex justify-center m-auto'>
             <div className='mt-20 w-full px-20'>
@@ -148,24 +161,14 @@ function Verifier() {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    <Tr>
-                                        <Td>1</Td>
-                                        <Td>NBR</Td>
-                                        <Td>0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8</Td>
-                                        <Td isNumeric>1000</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>2</Td>
-                                        <Td>NBR</Td>
-                                        <Td>0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8</Td>
-                                        <Td isNumeric>5000</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>3</Td>
-                                        <Td>NBR</Td>
-                                        <Td>0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8</Td>
-                                        <Td isNumeric>50000</Td>
-                                    </Tr>
+                                    {verifiers.map((verifier, index) => (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{verifier.orgName}</Td>
+                                            <Td>{verifier.address}</Td>
+                                            <Td isNumeric>{verifier.addedOn}</Td>
+                                        </Tr>
+                                    ))}
                                 </Tbody>
                             </Table>
                         </TableContainer>

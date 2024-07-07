@@ -14,7 +14,7 @@ const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
   getAllTransactions
 } = require("./utils/wallet");
 
-const { addVerifier, removeVerifier } = require("./utils/adminWallet");
+const { addVerifier, removeVerifier, getAllVerifierList } = require("./utils/adminWallet");
 
 const { orgGrantAccessAddresses } = require("./utils/orgWallet");
 
@@ -448,6 +448,15 @@ app.post("/removeVerifier", async (req, res) => {
     const { verifier } = req.body;
     const tx = await removeVerifier(verifier);
     res.status(201).json(tx);
+  } catch (error) {
+    res.status(500).json({ error: "Error removing verifier", error });
+  }
+});
+
+app.post("/getAllVerifiers", async (req, res) => {
+  try {
+    const verifiers = await getAllVerifierList()
+    res.status(200).json(verifiers);
   } catch (error) {
     res.status(500).json({ error: "Error removing verifier", error });
   }
