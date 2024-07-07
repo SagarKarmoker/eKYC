@@ -8,6 +8,7 @@ const User = require("./models/userModel");
 const nid = require("./models/nidModel");
 const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
+const Approved = require('./models/approvedModel');
 
 // Smart contract functions
 const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
@@ -27,15 +28,8 @@ const KycSchema = new mongoose.Schema({
   dateOfBirth: String,
   blocked: { type: Boolean, default: false }, // Add this line
 });
-
-const approvedSchema = new mongoose.Schema({
-  nid: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  walletAddress: { type: String, required: true },
-});
-
 const Kyc = mongoose.model("Kyc", KycSchema);
-const Approved = mongoose.model("Approved", approvedSchema);
+
 
 const app = express();
 app.use(express.json());

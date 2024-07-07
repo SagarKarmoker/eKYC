@@ -62,7 +62,6 @@ function Navbar() {
                       <Link to="/uploadNID">
                         <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">Upload NID</li>{" "}
                       </Link>
-                      {/* TODO: Working ⚠️ */}
                       <Link to="/verifier">
                         <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium ">Verifier</li>
                       </Link>
@@ -77,7 +76,7 @@ function Navbar() {
                   {/* TODO: Cooking */}
                   {userRole === "Org" && (
                     <>
-                      <Link to="/verifiedUserList">
+                      {/* <Link to="/verifiedUserList">
                         <li className="hover:underline">Verified Citizens</li>{" "}
                       </Link>
                       <Link to="/verifiedUserList">
@@ -85,8 +84,8 @@ function Navbar() {
                       </Link>
                       <Link to="/blockList">
                         <li className="hover:underline">Search Citizen</li>
-                      </Link>
-                      <Link to="/blockList">
+                      </Link> */}
+                      <Link to="/ekyc">
                         <li className="hover:underline">eKYC Data</li>
                       </Link>
                     </>

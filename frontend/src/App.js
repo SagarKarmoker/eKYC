@@ -46,6 +46,7 @@ function App() {
         {isUserSignedIn && <Route path="/my" element={<My />} />}
         {isUserSignedIn && <Route path="/history" element={<History />} />}
         {isUserSignedIn && <Route path="/verifier" element={<Verifier />} />}
+        {isUserSignedIn && <Route path="/ekyc" element={<Verified />} />}
       </Routes>
     </div>
     </ChakraProvider>
