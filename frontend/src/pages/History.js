@@ -27,6 +27,7 @@ function History() {
                         <div>
                             {history.map((tx, index) => (
                                 <div key={index} className="flex items-center justify-between w-full p-5 my-2 bg-gray-100 rounded-lg">
+                                    <p className="text-lg font-semibold text-dark-grey-900 text-center">{tx.reason}</p>
                                     <div>
                                         <p className="text-lg font-semibold text-dark-grey-900">Transaction Hash: {tx.hash}</p>
                                         <p className="text-lg font-semibold text-dark-grey-900">From: {tx.from}</p>
