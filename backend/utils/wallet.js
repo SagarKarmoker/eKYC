@@ -4,6 +4,7 @@ const sss = require('shamirs-secret-sharing');
 const { Buffer } = require('buffer');
 const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
+const Transaction = require("../models/transactionModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
 const axios = require('axios');
@@ -131,13 +132,13 @@ const submitKYC = async (ipfsHash, nid) => {
         console.log(tx)
 
         if (tx !== null) {
+            await saveTxDataForWallet(tx, nid);
             return tx;
         }
     } catch (error) {
         console.log(error);
     }
 }
-
 
 const grantAccess = async (nid, verifierAddress) => {
     try {
@@ -154,6 +155,7 @@ const grantAccess = async (nid, verifierAddress) => {
         console.log(tx)
 
         if (tx !== null) {
+            await saveTxDataForWallet(tx, nid);
             return tx;
         }
     } catch (error) {
@@ -176,6 +178,7 @@ const revokeAccess = async (nid, verifierAddress) => {
         console.log(tx)
 
         if (tx !== null) {
+            await saveTxDataForWallet(tx, nid);
             return tx;
         }
     } catch (error) {
@@ -192,6 +195,29 @@ const getAllTransactions = async (walletAddress) => {
         return response;
     } catch (error) {
         return error;
+    }
+}
+
+const saveTxDataForWallet = async (tx, nid) => {
+    try {
+        const transaction = new Transaction({
+            nid: nid,
+            nonce: tx.nonce,
+            gasPrice: tx.gasPrice.toString(),
+            gasLimit: tx.gasLimit.toString(),
+            to: tx.to,
+            value: tx.value.toString(),
+            data: tx.data,
+            chainId: tx.chainId,
+            v: tx.v,
+            r: tx.r,
+            s: tx.s,
+            from: tx.from,
+            hash: tx.hash
+        });
+        await transaction.save();
+    } catch (error) {
+        console.log(error)
     }
 }
 
