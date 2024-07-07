@@ -6,22 +6,11 @@ import loginImage from '../img/LoginEkyc.png'; // Import the login image
 import backgroundImage from '../img/loginBackground6.png'; // Import the background image
 
 function Login() {
-  const [users, setUsers] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [captcha, setCaptcha] = useState(Math.floor(Math.random() * 10) + 1);
   const [userCaptcha, setUserCaptcha] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = () => {
-    axios.get("http://localhost:3001/register").then((res) => {
-      console.log(res.data);
-    });
-  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -41,7 +30,8 @@ function Login() {
         phoneNumber,
         password,
       });
-      const { token, role, message } = response.data;
+      console.log(response.data)
+      const { token, role, nid, message } = response.data;
       Swal.fire({
         title: "Success",
         text: `${message} ${role}`,
@@ -53,11 +43,12 @@ function Login() {
       setPassword("");
       setUserCaptcha("");
       setCaptcha(Math.floor(Math.random() * 10) + 1);
-      fetchUsers();
       navigate("/account");
       window.location.reload();
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("phoneNumber", phoneNumber);
+      localStorage.setItem("nidNumber", nid); // Save the NID number in local storage
     } catch (error) {
       console.log("Login Error", error);
       Swal.fire({

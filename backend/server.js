@@ -12,7 +12,7 @@ const multer = require("multer");
 // Smart contract functions
 const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
   getAllTransactions
- } = require("./utils/wallet");
+} = require("./utils/wallet");
 
 const { orgGrantAccessAddresses } = require("./utils/orgWallet");
 
@@ -27,9 +27,9 @@ const KycSchema = new mongoose.Schema({
 });
 
 const approvedSchema = new mongoose.Schema({
-  nidPicture: { data: Buffer, contentType: String },
-  nidPictureBack: { data: Buffer, contentType: String },
-  eWallet: String,
+  nid: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  walletAddress: { type: String, required: true },
 });
 
 const Kyc = mongoose.model("Kyc", KycSchema);
@@ -287,12 +287,14 @@ app.get("/user/:nidNumber", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
-    const { nidNumber } = req.body;
-    const users = await Kyc.findOne({ nidNumber });
+    // const users = await Kyc.findOne({ nidNumber }); // TODO: no logic behind this 😡
+    const nidDocument = await Approved.findOne({ phoneNumber }, 'nid');
+    const nid = nidDocument ? nidDocument.nid : null;
     const user = await User.findOne({ phoneNumber });
-    if (users && users.blocked) {
-      return res.status(403).json({ message: "User is blocked" });
-    }
+    // TODO: no logic behind this 😡
+    // if (users && users.blocked) {
+    //   return res.status(403).json({ message: "User is blocked" });
+    // }
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
@@ -303,7 +305,12 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ userId: user._id }, SECRET_KEY, {
       expiresIn: "1hr",
     });
-    res.json({ message: "Login successful", role: user.role, token: token });
+
+    if(nid == null){
+      res.json({ message: "Login successful", role: user.role, token: token });
+    }else{
+      res.json({ message: "Login successful", role: user.role, token: token, nid: nid });
+    }
   } catch (error) {
     res.status(500).json({ error: "Error logging in" });
   }
@@ -312,11 +319,19 @@ app.post("/login", async (req, res) => {
 // SMART CONTRACT PART
 app.post("/createWallet", async (req, res) => {
   try {
-    const { nid, password } = req.body;
+    const { nid, phoneNumber, password } = req.body;
     console.log(nid, password)
-    const {walletAddress, shard} = await createWallet(nid, password);
+    const { walletAddress, shard } = await createWallet(nid, password);
     console.log(walletAddress, shard);
-    if(walletAddress != null && shard != null){
+    if (walletAddress != null && shard != null) {
+      // link user phone and nid and wallet address
+      const approved = new Approved({
+        nid: nid,
+        phoneNumber: phoneNumber,
+        walletAddress: walletAddress
+      });
+      await approved.save();
+
       res.status(201).json({ walletAddress, shard });
     }
   } catch (error) {
@@ -350,10 +365,10 @@ app.post("/submitKYC", async (req, res) => {
   try {
     const { ipfsHash, nid } = req.body; // element means nid against wallet
     const address = await getWalletAddress(nid);
-    
+
     console.log(ipfsHash, nid, address);
 
-    if (ipfsHash === undefined || nid === undefined ) {
+    if (ipfsHash === undefined || nid === undefined) {
       console.log(ipfsHash, nid, address);
     } else {
       const tx = await submitKYC(ipfsHash, nid);
@@ -405,7 +420,7 @@ app.post("/orgGrantAccess", async (req, res) => {
   try {
     const { orgAddress } = req.body;
     const citizens = await orgGrantAccessAddresses(orgAddress);
-    res.status(200).json({citizens});
+    res.status(200).json({ citizens });
   } catch (error) {
     res.status(500).json({ error: "Error fetching citizens", error });
   }

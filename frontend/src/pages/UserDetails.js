@@ -99,6 +99,7 @@ function UserDetails() {
           `http://localhost:3001/createWallet`,
           {
             nid: nidNumber,
+            phoneNumber: localStorage.getItem("phoneNumber"),
             password: "1234", //TODO: verify password
           }
         );
