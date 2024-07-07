@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoImg from '../img/taxSheildLogoTransparent.png'; // Import the login image
 
 function Navbar() {
   const isUserSignedIn = !!localStorage.getItem("token");
@@ -14,14 +15,15 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white border-b backdrop-blur-lg bg-opacity-80">
+
+    <nav className="fixed top-0 left-0 w-full z-50 border-b backdrop-blur-lg bg-opacity-50" style={{ backgroundColor: '#f5f5f5' }}>
       <div className="mx-auto max-w-7xl px-6 sm:px-6 lg:px-8">
         <div className="relative flex h-16 justify-between">
           <div className="flex flex-1 items-stretch justify-start">
             <Link className="flex flex-shrink-0 items-center" to="/">
               <img
-                className="block h-12 w-auto"
-                src="./taxation.png"
+                className="block h-28 w-auto"
+                src={logoImg}
                 alt="Taxation"
               />
             </Link>
@@ -76,12 +78,13 @@ function Navbar() {
               {!isUserSignedIn && (
                 <>
                   <Link to="/login">
-                    <li className="text-gray-700 hover:text-indigo-700 text-sm font-medium">
+                    <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium">
                       Login
                     </li>
+
                   </Link>
                   <Link to="/signup">
-                    <li className="text-gray-800 bg-indigo-100 hover:bg-indigo-200 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm">
+                    <li className="text-[#f5f5f5] hover:text-[#202020] bg-[#ff735c] hover:bg-gray-300 inline-flex items-center justify-center px-3 py-2 border border-transparent text-m font-medium rounded-md shadow-sm">
                       Signup
                     </li>
                   </Link>
