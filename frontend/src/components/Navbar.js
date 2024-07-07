@@ -33,20 +33,20 @@ function Navbar() {
               {isUserSignedIn && (
                 <>
                   <Link to="/account">
-                    <li className="hover:underline">Account</li>
+                    <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">Account</li>
                   </Link>
                   {userRole === "Taxpayer" && (
                     <>
                       <Link to="/kyc">
-                        <li className="hover:underline">KYC</li>
+                        <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">KYC</li>
                       </Link>
                       {isKycSubmitted && (
                         <>
                           <Link to="/approved">
-                            <li className="hover:underline">Update KYC</li>
+                            <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">Update KYC</li>
                           </Link>
                           <Link to="/my">
-                            <li className="hover:underline">My KYC</li>
+                            <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">My KYC</li>
                           </Link>
                         </>
                       )}
@@ -55,20 +55,20 @@ function Navbar() {
                   {userRole === "Admin" && (
                     <>
                       <Link to="/uploadNID">
-                        <li className="hover:underline">Upload NID</li>{" "}
+                        <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">Upload NID</li>{" "}
                       </Link>
                       <Link to="/verifiedUserList">
-                        <li className="hover:underline">Verified User List</li>
+                        <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium  ">Verified User List</li>
                       </Link>
                       <Link to="/blockList">
-                        <li className="hover:underline">Block List</li>
+                        <li className="text-[#202020] hover:text-[#ff735c] text-m font-medium ">Block List</li>
                       </Link>
                     </>
                   )}
                   <li>
                     <button
                       onClick={handleSignOut}
-                      className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition duration-300"
+                      className="text-[#f5f5f5] hover:text-[#202020] bg-[#ff735c] hover:bg-gray-300 inline-flex items-center justify-center px-3 py-2 border border-transparent text-m font-medium rounded-md shadow-sm"
                     >
                       Sign Out
                     </button>
