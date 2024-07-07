@@ -186,7 +186,6 @@ const revokeAccess = async (nid, verifierAddress) => {
     }
 }
 
-// TODO: Get all transactions for a given wallet address
 const getAllTransactions = async (walletAddress) => {
     try {
         const transactions = await Transaction.find({
@@ -229,5 +228,5 @@ const saveTxDataForWallet = async (tx, nid, reason) => {
 // export the function
 module.exports = {
     createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
-    getAllTransactions
+    getAllTransactions, saveTxDataForWallet
 }

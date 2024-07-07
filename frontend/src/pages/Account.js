@@ -23,10 +23,10 @@ function Account() {
         setWalletAddress(response.data);
         console.log("User Wallet Address:", response);
       }
-      else{
-        if(userRole === "Org"){
+      else {
+        if (userRole === "Org") {
           setWalletAddress("Complete your Org profile to get wallet address");
-        }else{
+        } else {
           setWalletAddress("Complete your KYC profile to get wallet address");
         }
       }
@@ -62,6 +62,19 @@ function Account() {
                     </h1>
                     <p className="font-bold">Org wallet Address: <span className="font-normal">{walletAddress}</span></p>
                   </div></>
+              )
+            }
+
+            {
+              userRole === "Admin" && (
+                <>
+                  <div class="flex flex-col items-center xl:p-10">
+                    <h1 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
+                      Welcome to Admin Panel
+                    </h1>
+                    <p className="font-bold">Admin wallet Address: <span className="font-normal">0xC9bd96A68995487f4F4a9C90D7E90Ae95ce44Aa3</span></p>
+                  </div>
+                  </>
               )
             }
           </div>

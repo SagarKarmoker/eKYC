@@ -14,6 +14,8 @@ const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
   getAllTransactions
 } = require("./utils/wallet");
 
+const { addVerifier, removeVerifier } = require("./utils/adminWallet");
+
 const { orgGrantAccessAddresses } = require("./utils/orgWallet");
 
 const SECRET_KEY = "super-secret-key";
@@ -406,7 +408,6 @@ app.post("/revokeVerifier", async (req, res) => {
   }
 });
 
-// TODO: Implementing this endpoint
 app.post("/getAllTxs", async (req, res) => {
   try {
     const { nid } = req.body; // element means nid against wallet
@@ -428,5 +429,26 @@ app.post("/orgGrantAccess", async (req, res) => {
     res.status(200).json({ citizens });
   } catch (error) {
     res.status(500).json({ error: "Error fetching citizens", error });
+  }
+});
+
+// ADMIN PART
+app.post("/addVerifier", async (req, res) => {
+  try {
+    const { verifier } = req.body;
+    const tx = await addVerifier(verifier);
+    res.status(201).json(tx);
+  } catch (error) {
+    res.status(500).json({ error: "Error adding verifier", error });
+  }
+});
+
+app.post("/removeVerifier", async (req, res) => {
+  try {
+    const { verifier } = req.body;
+    const tx = await removeVerifier(verifier);
+    res.status(201).json(tx);
+  } catch (error) {
+    res.status(500).json({ error: "Error removing verifier", error });
   }
 });
