@@ -5,6 +5,8 @@
 ## Authors
 
 - [@SagarKarmoker](https://www.github.com/SagarKarmoker)
+- [@WebAdib](https://github.com/WebAdib)
+- [@Nur-Adnan](https://github.com/Nur-Adnan)
 
 
 ## Deployment
