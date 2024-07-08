@@ -74,7 +74,7 @@ function Navbar() {
                     </>
                   )}
                   {/* TODO: Cooking */}
-                  {userRole === "Org" && (
+                  {userRole === "Organization" && (
                     <>
                       {/* <Link to="/verifiedUserList">
                         <li className="hover:underline">Verified Citizens</li>{" "}

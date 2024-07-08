@@ -17,8 +17,10 @@ import axios from 'axios'
 
 function Verified() {
     // TODO: ⚠️⚠️⚠️Replace with actual org address from login ⚠️⚠️⚠️
-    const orgAddress = '0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8'
+    // const walletAddress = '0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8'
 
+    const [walletAddress, setWalletAddress] = useState("");
+    const userRole = localStorage.getItem("role");
     const toast = useToast()
     const [citizenAddr, setCitizenAddr] = useState('')
     const [nid, setNid] = useState('')
@@ -75,7 +77,7 @@ function Verified() {
                 isClosable: true,
             })
             setIsNID(true)
-            const {kycData} = await axios.post('http://localhost:3001/removeVerifier', {
+            const { kycData } = await axios.post('http://localhost:3001/removeVerifier', {
                 nid
             })
             console.log(kycData)
@@ -90,7 +92,7 @@ function Verified() {
             //         isClosable: true,
             //     })
             // }
-            if(kycData.reason === 'Verifier not found in list'){
+            if (kycData.reason === 'Verifier not found in list') {
                 setIsNID(false)
                 toast({
                     title: 'Error',
@@ -114,11 +116,36 @@ function Verified() {
         }
     }
 
+    const getWalletAddress = async () => {
+        console.log("Account Page");
+        try {
+            const nidNumber = localStorage.getItem("nidNumber");
+            console.log("NID Number before:", nidNumber);
+            if (nidNumber !== "undefined") {
+                console.log("NID Number: after", nidNumber);
+                const response = await axios.post(`http://localhost:3001/getWalletAddress`, {
+                    nidNumber: nidNumber,
+                });
+                setWalletAddress(response.data);
+                console.log("User Wallet Address:", response);
+            }
+            // else {
+            //   if (userRole === "Orgnization") {
+            //     setWalletAddress("Complete your Org profile to get wallet address");
+            //   } else {
+            //     setWalletAddress("Complete your KYC profile to get wallet address");
+            //   }
+            // }
+        } catch (error) {
+            console.error("Error getting user address", error);
+        }
+    };
+
     useEffect(() => {
         const fetchVerifiers = async () => {
             try {
                 const res = await axios.post('http://localhost:3001/orgGrantAccess', {
-                    orgAddress
+                    walletAddress
                 })
                 console.log(res.data)
                 setCitizensAddr(res.data.citizens)
@@ -128,6 +155,10 @@ function Verified() {
         }
         fetchVerifiers()
     }, [])
+
+    useEffect(() => {
+        getWalletAddress();
+    }, []);
 
     return (
         <div className='flex justify-center m-auto'>
@@ -186,15 +217,21 @@ function Verified() {
                                 <Tbody>
                                     {/* table data */}
                                     {
-                                        citizensAddr.map((citizen, index) => (
-                                            <Tr key={index}>
-                                                <Td>{index + 1}</Td>
-                                                <Td>{citizen.name}</Td>
-                                                <Td>{citizen.nid}</Td>
-                                                <Td>{citizen.address}</Td>
+                                        citizensAddr && citizenAddr.length != 0 ? (
+                                            citizensAddr.map((citizen, index) => (
+                                                <Tr key={index}>
+                                                    <Td>{index + 1}</Td>
+                                                    <Td>{citizen.name}</Td>
+                                                    <Td>{citizen.nid}</Td>
+                                                    <Td>{citizen.address}</Td>
+                                                </Tr>
+                                            ))
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan='4'>No data found</Td>
                                             </Tr>
-                                        ))
-                                    
+                                        )
+
                                     }
                                 </Tbody>
                             </Table>

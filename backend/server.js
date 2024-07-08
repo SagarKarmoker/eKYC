@@ -17,7 +17,7 @@ const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
 
 const { addVerifier, removeVerifier, getAllVerifierList } = require("./utils/adminWallet");
 
-const { orgGrantAccessAddresses, getKYCUsingAddr } = require("./utils/orgWallet");
+const { orgGrantAccessAddresses, getKYCUsingAddr, orgCreateWallet } = require("./utils/orgWallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -76,6 +76,25 @@ app.post("/register", async (req, res) => {
 
       if (!matchingPerson) {
         return res.status(400).json({ error: "Full name doesn't match" });
+      }
+    }
+    else if(role === "Organization"){
+      try {
+        const { walletAddress, shard, orgId } = await orgCreateWallet(password);
+        console.log(walletAddress, shard);
+        if (walletAddress != null && shard != null) {
+          // link user phone and nid and wallet address
+          const approved = new Approved({
+            nid: orgId,
+            phoneNumber: phoneNumber,
+            walletAddress: walletAddress
+          });
+          await approved.save();
+    
+          res.status(201).json({ walletAddress, shard });
+        }
+      } catch (error) {
+        res.status(500).json({ error: "Error creating wallet" });
       }
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -283,6 +302,7 @@ app.get("/user/:nidNumber", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
+
     // const users = await Kyc.findOne({ nidNumber }); // TODO: no logic behind this 😡
     const nidDocument = await Approved.findOne({ phoneNumber }, 'nid');
     const nid = nidDocument ? nidDocument.nid : null;
@@ -416,6 +436,26 @@ app.post("/getAllTxs", async (req, res) => {
 });
 
 // ORG PART
+app.post("/createOrgWallet", async (req, res) => {
+  try {
+    const { walletAddress, shard, orgId } = await orgCreateWallet();
+    console.log(walletAddress, shard);
+    if (walletAddress != null && shard != null) {
+      // link user phone and nid and wallet address
+      const approved = new Approved({
+        nid: orgId,
+        phoneNumber: phoneNumber,
+        walletAddress: walletAddress
+      });
+      await approved.save();
+
+      res.status(201).json({ walletAddress, shard });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error creating wallet" });
+  }
+});
+
 app.post("/orgGrantAccess", async (req, res) => {
   try {
     const { orgAddress } = req.body;

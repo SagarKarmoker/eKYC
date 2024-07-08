@@ -45,6 +45,56 @@ const orgGrantAccessAddresses = async (orgAddress) => {
     }
 }
 
+const orgCreateWallet = async (password) => {
+    try {
+        const wallet = ethers.Wallet.createRandom();
+        const walletAddress = wallet.address;
+        const privateKey = wallet.privateKey;
+
+        // org ID for the organization 
+        // generate random org ID but must start with 123
+        const orgId = '123' + Math.floor(100000 + Math.random() * 900000);
+
+        // SSS
+        const secret = Buffer.from(privateKey.slice(2), 'hex'); // Remove '0x' from private key
+        const shards = sss.split(secret, { shares: 3, threshold: 2 });
+
+        // Store shard3 in blockchain
+        const encryptedShard3 = CryptoJS.AES.encrypt(shards[2].toString('hex'), password).toString();
+
+        // Interact with the deployed contract
+        const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
+
+        // Send the transaction to store shard3 on the blockchain
+        const tx = await contract.setWallet(parseInt(orgId), encryptedShard3, walletAddress, {
+            gasPrice: 0
+        });
+        await tx.wait();
+
+        console.log(tx);
+
+        if (tx !== null) {
+            // Store shard2 in KMS or DB using our key
+            const shard2 = new ShardKey({
+                nidNumber: orgId,
+                address: walletAddress,
+                shardA: shards[0].toString('hex'),
+                shardB: CryptoJS.AES.encrypt(shards[1].toString('hex'), "ekycdev").toString()
+            });
+            await shard2.save();
+
+            return {
+                walletAddress,
+                shard: shards[0].toString('hex'), 
+                orgId: orgId
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 // TODO: Cooking ⚠️
 const getKYCUsingAddr = async (address) => {
     try {
@@ -86,5 +136,5 @@ const orgGrantAccess = async (orgAddress, citizenAddress) => {
 
 
 module.exports = {
-    orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID
+    orgCreateWallet, orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID
 }
