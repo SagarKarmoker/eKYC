@@ -144,8 +144,10 @@ function Verified() {
     useEffect(() => {
         const fetchVerifiers = async () => {
             try {
+                await getWalletAddress();
+                console.log(walletAddress)
                 const res = await axios.post('http://localhost:3001/orgGrantAccess', {
-                    walletAddress
+                    orgAddress: walletAddress
                 })
                 console.log(res.data)
                 setCitizensAddr(res.data.citizens)
@@ -154,11 +156,7 @@ function Verified() {
             }
         }
         fetchVerifiers()
-    }, [])
-
-    useEffect(() => {
-        getWalletAddress();
-    }, []);
+    }, [walletAddress])
 
     return (
         <div className='flex justify-center m-auto'>
@@ -217,7 +215,7 @@ function Verified() {
                                 <Tbody>
                                     {/* table data */}
                                     {
-                                        citizensAddr && citizenAddr.length != 0 ? (
+                                        citizensAddr.length > 0 ? (
                                             citizensAddr.map((citizen, index) => (
                                                 <Tr key={index}>
                                                     <Td>{index + 1}</Td>
@@ -231,7 +229,6 @@ function Verified() {
                                                 <Td colSpan='4'>No data found</Td>
                                             </Tr>
                                         )
-
                                     }
                                 </Tbody>
                             </Table>
