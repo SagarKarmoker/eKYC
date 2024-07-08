@@ -61,6 +61,19 @@ function Account() {
           </div>
           <div className="flex items-center justify-center w-full lg:p-12">
             <img src={accountImage} alt="Account Illustration" className="rounded-lg" />
+
+            {
+              userRole === "Admin" && (
+                <>
+                  <div class="flex flex-col items-center xl:p-10">
+                    <h1 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
+                      Welcome to Admin Panel
+                    </h1>
+                    <p className="font-bold">Admin wallet Address: <span className="font-normal">0xC9bd96A68995487f4F4a9C90D7E90Ae95ce44Aa3</span></p>
+                  </div>
+                  </>
+              )
+            }
           </div>
         </div>
       </div>

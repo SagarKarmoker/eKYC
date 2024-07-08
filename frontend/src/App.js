@@ -14,11 +14,14 @@ import UploadNID from "./pages/UploadNID";
 import BlockListPage from "./pages/BlockList";
 import History from "./pages/History";
 import Verified from "./pages/org/Verified";
+import Verifier from "./pages/admin/Verifier";
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   const isUserSignedIn = !!localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
   return (
+    <ChakraProvider>
     <div className="App">
       <Navbar />
       <Routes>
@@ -42,8 +45,11 @@ function App() {
         {isUserSignedIn && <Route path="/approved" element={<Approved />} />}
         {isUserSignedIn && <Route path="/my" element={<My />} />}
         {isUserSignedIn && <Route path="/history" element={<History />} />}
+        {isUserSignedIn && <Route path="/verifier" element={<Verifier />} />}
+        {isUserSignedIn && <Route path="/ekyc" element={<Verified />} />}
       </Routes>
     </div>
+    </ChakraProvider>
   );
 }
 

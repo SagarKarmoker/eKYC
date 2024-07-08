@@ -8,13 +8,16 @@ const User = require("./models/userModel");
 const nid = require("./models/nidModel");
 const { bufferToHex, toBuffer } = require("ethereumjs-util");
 const multer = require("multer");
+const Approved = require('./models/approvedModel');
 
 // Smart contract functions
 const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
   getAllTransactions
 } = require("./utils/wallet");
 
-const { orgGrantAccessAddresses } = require("./utils/orgWallet");
+const { addVerifier, removeVerifier, getAllVerifierList } = require("./utils/adminWallet");
+
+const { orgGrantAccessAddresses, getKYCUsingAddr } = require("./utils/orgWallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -25,15 +28,8 @@ const KycSchema = new mongoose.Schema({
   dateOfBirth: String,
   blocked: { type: Boolean, default: false }, // Add this line
 });
-
-const approvedSchema = new mongoose.Schema({
-  nid: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  walletAddress: { type: String, required: true },
-});
-
 const Kyc = mongoose.model("Kyc", KycSchema);
-const Approved = mongoose.model("Approved", approvedSchema);
+
 
 const app = express();
 app.use(express.json());
@@ -406,7 +402,6 @@ app.post("/revokeVerifier", async (req, res) => {
   }
 });
 
-// TODO: Implementing this endpoint
 app.post("/getAllTxs", async (req, res) => {
   try {
     const { nid } = req.body; // element means nid against wallet
@@ -428,5 +423,46 @@ app.post("/orgGrantAccess", async (req, res) => {
     res.status(200).json({ citizens });
   } catch (error) {
     res.status(500).json({ error: "Error fetching citizens", error });
+  }
+});
+
+// TODO: Cooking ⚠️ (rquire wallet of org to access data)
+app.post("/orgKycDataByAddress", async (req, res) => {
+  try {
+    const { citizenAddr } = req.body;
+    const kycData = await getKYCUsingAddr(citizenAddr);
+    res.status(200).json({ kycData });
+  } catch (error) {
+    res.status(500).json({ error: "Error granting access", error });
+  }
+});
+
+// ADMIN PART
+app.post("/addVerifier", async (req, res) => {
+  try {
+    const { verifier } = req.body;
+    const tx = await addVerifier(verifier);
+    res.status(201).json(tx);
+  } catch (error) {
+    res.status(500).json({ error: "Error adding verifier", error });
+  }
+});
+
+app.post("/removeVerifier", async (req, res) => {
+  try {
+    const { verifier } = req.body;
+    const tx = await removeVerifier(verifier);
+    res.status(201).json(tx);
+  } catch (error) {
+    res.status(500).json({ error: "Error removing verifier", error });
+  }
+});
+
+app.post("/getAllVerifiers", async (req, res) => {
+  try {
+    const verifiers = await getAllVerifierList()
+    res.status(200).json(verifiers);
+  } catch (error) {
+    res.status(500).json({ error: "Error removing verifier", error });
   }
 });
