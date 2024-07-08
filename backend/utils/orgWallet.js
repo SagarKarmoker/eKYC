@@ -105,6 +105,8 @@ const getKYCUsingAddr = async (orgId, address) => {
         const kyc = await contract.getKYCData(address);
         console.log(kyc)
 
+        const nid = await Approved.findOne({ walletAddress: address }, 'nid');
+
         if (kyc.reason == 'Verifier not found in list'){
             return {status: false, message: 'Verifier not found in list'}
         }
@@ -112,7 +114,8 @@ const getKYCUsingAddr = async (orgId, address) => {
             return {
                 ipfsHash: kyc[0],
                 verified: kyc[1],
-                time: kyc[2]
+                time: kyc[2],
+                nid 
             };
         }
     } catch (error) {
