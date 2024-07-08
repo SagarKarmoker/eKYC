@@ -9,6 +9,7 @@ const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
 const axios = require('axios');
 const Approved = require('../models/approvedModel');
 const KYC = require('../models/kycModel');
+const {decryptShard} = require('./wallet')
 
 // Smart contract ABI and address
 const WalletContractAddress = "0xd2d031df2edfd36e58d890f7fe602c27263954b1"
@@ -96,16 +97,19 @@ const orgCreateWallet = async (password) => {
 }
 
 // TODO: Cooking ⚠️
-const getKYCUsingAddr = async (address) => {
+const getKYCUsingAddr = async (orgId, address) => {
     try {
-        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
+        const secret = await decryptShard(orgId, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
         const kyc = await contract.getKYCData(address);
         console.log(kyc)
+
         if (kyc.reason == 'Verifier not found in list'){
             return {status: false, message: 'Verifier not found in list'}
         }
         else{
-            return kyc
+            return kyc;
         }
     } catch (error) {
         return error;

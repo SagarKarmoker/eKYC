@@ -469,8 +469,8 @@ app.post("/orgGrantAccess", async (req, res) => {
 // TODO: Cooking ⚠️ (rquire wallet of org to access data)
 app.post("/orgKycDataByAddress", async (req, res) => {
   try {
-    const { citizenAddr } = req.body;
-    const kycData = await getKYCUsingAddr(citizenAddr);
+    const { citizenAddr, orgId } = req.body;
+    const kycData = await getKYCUsingAddr(orgId, citizenAddr);
     res.status(200).json({ kycData });
   } catch (error) {
     res.status(500).json({ error: "Error granting access", error });

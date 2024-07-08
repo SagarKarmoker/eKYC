@@ -76,6 +76,7 @@ const getWalletAddress = async (nid) => {
 
 const decryptShard = async (nid, password) => {
     try {
+        console.log(nid, password)
         // Retrieve shards from the database
         const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
         console.log(shardKey)
@@ -228,5 +229,5 @@ const saveTxDataForWallet = async (tx, nid, reason) => {
 // export the function
 module.exports = {
     createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
-    getAllTransactions, saveTxDataForWallet
+    getAllTransactions, saveTxDataForWallet, decryptShard
 }

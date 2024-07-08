@@ -16,11 +16,9 @@ import {
 import axios from 'axios'
 
 function Verified() {
-    // TODO: ⚠️⚠️⚠️Replace with actual org address from login ⚠️⚠️⚠️
-    // const walletAddress = '0x2DbA7f13c06Abb5E1063a3DE0189Ed9D8D2C85f8'
-
     const [walletAddress, setWalletAddress] = useState("");
     const userRole = localStorage.getItem("role");
+    const orgId = localStorage.getItem("nidNumber");
     const toast = useToast()
     const [citizenAddr, setCitizenAddr] = useState('')
     const [nid, setNid] = useState('')
@@ -39,6 +37,7 @@ function Verified() {
             })
             setIsAddr(true)
             const res = await axios.post('http://localhost:3001/orgKycDataByAddress', { // TODO: Cooking ⚠️
+                orgId,
                 citizenAddr
             })
             console.log(res.data)
