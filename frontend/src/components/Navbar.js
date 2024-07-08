@@ -27,7 +27,7 @@ function Navbar() {
                 src={logoImg}
                 alt="Taxation"
               /> 
-              <p className="pl-3 text-2xl font-bold">eKYC</p>
+              <p className="pl-3 text-2xl text-[#202020] font-bold">e-KYC</p>
             </Link>
           </div>
           <div className="">

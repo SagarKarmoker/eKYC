@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import Swal from "sweetalert2";
-import backgroundImage from '../img/signupBackground1.png';  // Update the path
+import backgroundImage from '../img/loginBackground7.png';  // Update the path
 import rightSideImage from '../img/signupBackground2.png';  // Update the path
 
 var firebaseConfig = {
