@@ -17,7 +17,7 @@ const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
 
 const { addVerifier, removeVerifier, getAllVerifierList } = require("./utils/adminWallet");
 
-const { orgGrantAccessAddresses, getKYCUsingAddr, orgCreateWallet } = require("./utils/orgWallet");
+const { orgGrantAccessAddresses, getKYCUsingAddr, orgCreateWallet, acceptOrDeclineKyc } = require("./utils/orgWallet");
 
 const SECRET_KEY = "super-secret-key";
 
@@ -466,7 +466,6 @@ app.post("/orgGrantAccess", async (req, res) => {
   }
 });
 
-// TODO: Cooking ⚠️ (rquire wallet of org to access data)
 app.post("/orgKycDataByAddress", async (req, res) => {
   try {
     const { citizenAddr, orgId } = req.body;
@@ -474,6 +473,17 @@ app.post("/orgKycDataByAddress", async (req, res) => {
     res.status(200).json({ kycData });
   } catch (error) {
     res.status(500).json({ error: "Error granting access", error });
+  }
+});
+
+app.post("/acceptOrDeclineKyc", async (req, res) => {
+  try {
+    const { orgId, address, status } = req.body;
+    console.log(orgId, address, status)
+    const tx = await acceptOrDeclineKyc(orgId, address, status);
+    res.status(201).json(tx);
+  } catch (error) {
+    console.log(error)
   }
 });
 

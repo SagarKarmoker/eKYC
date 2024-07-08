@@ -1,8 +1,12 @@
 import { BigNumber } from 'ethers';
-import { Divider, Center } from '@chakra-ui/react';
+import { Divider, Center, Toast } from '@chakra-ui/react';
+import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
 
-const ShowKycDetails = ({ kycData }) => {
+const ShowKycDetails = ({ kycData, citizenAddr }) => {
     const gatewayBaseUrl = 'http://127.0.0.1:8080/ipfs';
+    const orgId = localStorage.getItem('nidNumber');
+    const toast = useToast();
 
     // Ensure kycData is defined
     if (!kycData) {
@@ -10,10 +14,43 @@ const ShowKycDetails = ({ kycData }) => {
     }
 
     const { ipfsHash, verified, time, nid } = kycData;
+    console.log(citizenAddr)
 
     // Convert BigNumber time to a readable format
     const date = new Date(BigNumber.from(time?.hex).toNumber() * 1000);
     const formattedDate = date.toLocaleString();
+
+    const handleVrifyKyc = async () => {
+        try {
+            // Verify KYC
+            const response = await axios.post('http://localhost:3001/acceptOrDeclineKyc', {
+                orgId: orgId,
+                address: citizenAddr,
+                status: verified ? 'true' : 'false'
+            });
+            console.log(response);
+            if (response.data == true) {
+                toast({
+                    title: "KYC Verified",
+                    description: "KYC has been verified successfully",
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "KYC Verification Failed",
+                    description: "KYC verification failed",
+                    status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="flex gap-4 mt-10">
@@ -36,8 +73,9 @@ const ShowKycDetails = ({ kycData }) => {
 
                 {/* verify kyc */}
                 <div className="flex justify-center mt-4">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Verify
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleVrifyKyc}>
+                        Verify and Accept
                     </button>
                 </div>
             </div>

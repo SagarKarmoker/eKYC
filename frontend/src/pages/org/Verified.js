@@ -174,7 +174,8 @@ function Verified() {
                 {
                     isClicked ? (
                         <>
-                            {kycData && <ShowKycDetails kycData={kycData} />}
+                            {/* TODO: citizenAddr passing as null ⚠️ */}
+                            {kycData && citizenAddr != null && <ShowKycDetails kycData={kycData} citizenAddr={citizenAddr} />}
                         </>
                     ) : (
                         <>

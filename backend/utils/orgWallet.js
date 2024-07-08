@@ -6,10 +6,11 @@ const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
-const axios = require('axios');
+const {saveTxDataForWallet} = require('./wallet')
 const Approved = require('../models/approvedModel');
 const KYC = require('../models/kycModel');
 const {decryptShard} = require('./wallet')
+
 
 // Smart contract ABI and address
 const WalletContractAddress = "0xd2d031df2edfd36e58d890f7fe602c27263954b1"
@@ -85,6 +86,8 @@ const orgCreateWallet = async (password) => {
             });
             await shard2.save();
 
+            await saveTxDataForWallet(tx, orgId, `Creation of wallet ${walletAddress}`);
+
             return {
                 walletAddress,
                 shard: shards[0].toString('hex'), 
@@ -96,7 +99,6 @@ const orgCreateWallet = async (password) => {
     }
 }
 
-// TODO: Cooking ⚠️
 const getKYCUsingAddr = async (orgId, address) => {
     try {
         const secret = await decryptShard(orgId, "1234");
@@ -146,6 +148,27 @@ const orgGrantAccess = async (orgAddress, citizenAddress) => {
 }
 
 
+const acceptOrDeclineKyc = async(orgId, address, status) => {
+    try {
+        const secret = await decryptShard(orgId, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
+        
+        const tx = await contract.verifyKYC(address, status, {
+            gasPrice: 0
+        });
+        
+        if(tx !== null){
+            await saveTxDataForWallet(tx, orgId, `KYC Verified for ${address} by ${orgId}`);
+            return true;
+        }else{
+            return false;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
 module.exports = {
-    orgCreateWallet, orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID
+    orgCreateWallet, orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID, acceptOrDeclineKyc
 }

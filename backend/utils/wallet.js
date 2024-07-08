@@ -7,7 +7,6 @@ const ShardKey = require("../models/shardKeyModel");
 const Transaction = require("../models/transactionModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
-const axios = require('axios');
 
 // user->shard1 (browser)
 // nid->shard2 (kms)
