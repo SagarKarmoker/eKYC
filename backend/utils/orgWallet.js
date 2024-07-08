@@ -109,7 +109,11 @@ const getKYCUsingAddr = async (orgId, address) => {
             return {status: false, message: 'Verifier not found in list'}
         }
         else{
-            return kyc;
+            return {
+                ipfsHash: kyc[0],
+                verified: kyc[1],
+                time: kyc[2]
+            };
         }
     } catch (error) {
         return error;
