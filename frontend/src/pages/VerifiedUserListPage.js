@@ -110,7 +110,7 @@ const VerifiedUserListPage = () => {
                 />
                 <button
                   onClick={handleClear}
-                  className="px-4 py-2 bg-red-500 text-white rounded-r-md hover:bg-red-600 focus:outline-none"
+                  className="px-4 py-2 bg-[#ff735c] text-white rounded-r-md hover:bg-red-600 focus:outline-none"
                 >
                   Clear
                 </button>
@@ -118,7 +118,7 @@ const VerifiedUserListPage = () => {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white">
+            <table className="min-w-full bg-[#f5f5f5]">
               <thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
                 <tr>
                   <th className="py-3 px-6 text-left">NID Number</th>
