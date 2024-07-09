@@ -7,7 +7,6 @@ const ShardKey = require("../models/shardKeyModel");
 const Transaction = require("../models/transactionModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
-const axios = require('axios');
 
 // user->shard1 (browser)
 // nid->shard2 (kms)
@@ -76,6 +75,7 @@ const getWalletAddress = async (nid) => {
 
 const decryptShard = async (nid, password) => {
     try {
+        console.log(nid, password)
         // Retrieve shards from the database
         const shardKey = await ShardKey.findOne({ nidNumber: nid }).exec();
         console.log(shardKey)
@@ -228,5 +228,5 @@ const saveTxDataForWallet = async (tx, nid, reason) => {
 // export the function
 module.exports = {
     createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
-    getAllTransactions, saveTxDataForWallet
+    getAllTransactions, saveTxDataForWallet, decryptShard
 }

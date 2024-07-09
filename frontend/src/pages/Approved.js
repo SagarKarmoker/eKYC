@@ -9,10 +9,10 @@ const ipfs = create({ url: "http://127.0.0.1:5001" });
 function ImageUpload() {
   const [frontImage, setFrontImage] = useState(null);
   const [backImage, setBackImage] = useState(null);
+  const nid = localStorage.getItem("nidNumber");
 
   const storeKYCData = async (ipfsHash) => {
     try {
-      const nid = localStorage.getItem("nidNumber") || "1234";
       const response = await axios.post(`http://localhost:3001/submitKYC`, {
         ipfsHash,
         nid,
@@ -34,7 +34,7 @@ function ImageUpload() {
 
   async function uploadFilesAsDirectory(files) {
     try {
-      const directoryName = `images-${Date.now()}`; // Unique directory name
+      const directoryName = `images-${nid}`; // Unique directory name
       const filesToAdd = files.map((file, index) => {
         return {
           path: `${directoryName}/image${index + 1}.jpg`, // Customizable path for each file

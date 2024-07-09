@@ -25,13 +25,14 @@ function Account() {
         });
         setWalletAddress(response.data);
         console.log("User Wallet Address:", response);
-      } else {
-        if (userRole === "Org") {
-          setWalletAddress("Complete your Org profile to get wallet address");
-        } else {
-          setWalletAddress("Complete your KYC profile to get wallet address");
-        }
-      }
+      } 
+      // else {
+      //   if (userRole === "Orgnization") {
+      //     setWalletAddress("Complete your Org profile to get wallet address");
+      //   } else {
+      //     setWalletAddress("Complete your KYC profile to get wallet address");
+      //   }
+      // }
     } catch (error) {
       console.error("Error getting user address", error);
     }
@@ -50,7 +51,7 @@ function Account() {
                 <p className="font-bold text-[#202020] text-2xl">Your wallet Address: <span className="font-normal">{walletAddress}</span></p>
               </div>
             )}
-            {userRole === "Org" && (
+            {userRole === "Organization" && (
               <div className="flex flex-col items-start xl:p-10">
                 <h1 className="mb-12 text-4xl font-extrabold text-dark-grey-900">
                   Welcome to Organization Account

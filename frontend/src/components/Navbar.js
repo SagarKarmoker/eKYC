@@ -72,7 +72,8 @@ function Navbar() {
                       </NavLink>
                     </>
                   )}
-                  {userRole === "Org" && (
+                  {/* TODO: Cooking */}
+                  {userRole === "Organization" && (
                     <>
                       <NavLink to="/ekyc" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "hover:underline"}>
                         <li>eKYC Data</li>

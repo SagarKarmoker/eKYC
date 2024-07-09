@@ -6,9 +6,11 @@ const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
 const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
-const axios = require('axios');
+const {saveTxDataForWallet} = require('./wallet')
 const Approved = require('../models/approvedModel');
 const KYC = require('../models/kycModel');
+const {decryptShard} = require('./wallet')
+
 
 // Smart contract ABI and address
 const WalletContractAddress = "0xd2d031df2edfd36e58d890f7fe602c27263954b1"
@@ -45,17 +47,78 @@ const orgGrantAccessAddresses = async (orgAddress) => {
     }
 }
 
-// TODO: Cooking ⚠️
-const getKYCUsingAddr = async (address) => {
+const orgCreateWallet = async (password) => {
     try {
-        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
+        const wallet = ethers.Wallet.createRandom();
+        const walletAddress = wallet.address;
+        const privateKey = wallet.privateKey;
+
+        // org ID for the organization 
+        // generate random org ID but must start with 123
+        const orgId = '123' + Math.floor(100000 + Math.random() * 900000);
+
+        // SSS
+        const secret = Buffer.from(privateKey.slice(2), 'hex'); // Remove '0x' from private key
+        const shards = sss.split(secret, { shares: 3, threshold: 2 });
+
+        // Store shard3 in blockchain
+        const encryptedShard3 = CryptoJS.AES.encrypt(shards[2].toString('hex'), password).toString();
+
+        // Interact with the deployed contract
+        const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+        const contract = new ethers.Contract(WalletContractAddress, WalletContract.abi, signer);
+
+        // Send the transaction to store shard3 on the blockchain
+        const tx = await contract.setWallet(parseInt(orgId), encryptedShard3, walletAddress, {
+            gasPrice: 0
+        });
+        await tx.wait();
+
+        console.log(tx);
+
+        if (tx !== null) {
+            // Store shard2 in KMS or DB using our key
+            const shard2 = new ShardKey({
+                nidNumber: orgId,
+                address: walletAddress,
+                shardA: shards[0].toString('hex'),
+                shardB: CryptoJS.AES.encrypt(shards[1].toString('hex'), "ekycdev").toString()
+            });
+            await shard2.save();
+
+            await saveTxDataForWallet(tx, orgId, `Creation of wallet ${walletAddress}`);
+
+            return {
+                walletAddress,
+                shard: shards[0].toString('hex'), 
+                orgId: orgId
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const getKYCUsingAddr = async (orgId, address) => {
+    try {
+        const secret = await decryptShard(orgId, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
         const kyc = await contract.getKYCData(address);
         console.log(kyc)
+
+        const nid = await Approved.findOne({ walletAddress: address }, 'nid');
+
         if (kyc.reason == 'Verifier not found in list'){
             return {status: false, message: 'Verifier not found in list'}
         }
         else{
-            return kyc
+            return {
+                ipfsHash: kyc[0],
+                verified: kyc[1],
+                time: kyc[2],
+                nid 
+            };
         }
     } catch (error) {
         return error;
@@ -85,6 +148,27 @@ const orgGrantAccess = async (orgAddress, citizenAddress) => {
 }
 
 
+const acceptOrDeclineKyc = async(orgId, address, status) => {
+    try {
+        const secret = await decryptShard(orgId, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
+        
+        const tx = await contract.verifyKYC(address, status, {
+            gasPrice: 0
+        });
+        
+        if(tx !== null){
+            await saveTxDataForWallet(tx, orgId, `KYC Verified for ${address} by ${orgId}`);
+            return true;
+        }else{
+            return false;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
 module.exports = {
-    orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID
+    orgCreateWallet, orgGrantAccessAddresses, orgGrantAccess, getKYCUsingAddr, getKYCUsingNID, acceptOrDeclineKyc
 }
