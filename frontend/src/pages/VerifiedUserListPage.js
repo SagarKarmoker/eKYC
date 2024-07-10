@@ -118,7 +118,7 @@ const VerifiedUserListPage = () => {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-[#f5f5f5]">
+            <table className="min-w-full bg-white">
               <thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
                 <tr>
                   <th className="py-3 px-6 text-left">NID Number</th>
