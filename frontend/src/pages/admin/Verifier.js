@@ -5,14 +5,13 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
 } from '@chakra-ui/react'
 import axios from 'axios'
+import backgroundImage from "../../img/loginBackground7.png"; // Import your background image
 
 function Verifier() {
     const toast = useToast()
@@ -49,7 +48,6 @@ function Verifier() {
         } catch (error) {
             console.log(error)
             setIsAddingVerifier(false)
-            // show toast
             toast({
                 title: 'Error',
                 description: "Something went wrong.",
@@ -88,7 +86,6 @@ function Verifier() {
         } catch (error) {
             console.log(error)
             setIsDeletingVerifier(false)
-            // show toast
             toast({
                 title: 'Error',
                 description: "Something went wrong.",
@@ -110,69 +107,77 @@ function Verifier() {
             }
         }
         fetchVerifiers()
-    },[])
+    }, [])
 
     return (
-        <div className='flex justify-center m-auto'>
-            <div className='mt-20 w-full px-20'>
-                <h1 className='text-3xl font-bold text-center'>Verifier</h1>
-                <div className='mt-5'>
-                    <p className='text-lg font-medium text-center'>Add and Delete Verifier</p>
-                </div>
-                <div className='flex gap-10 mt-10'>
-                    <div className='flex flex-col w-[30%]'>
-                        <div className='mt-5'>
-                            <div className='flex flex-col'>
-                                <label className='text-lg font-medium'>Add Verifier</label>
-                                <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
-                                <Button onClick={handleAddVerifier} className='w-full mt-2 p-2 bg-blue-500 text-white rounded-md' isLoading={isAddingVerifier}
-                                    loadingText='Submitting'
-                                    colorScheme='green'
-                                    variant='solid'
-                                >Add Verifier</Button>
+        <div style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', minHeight: '100vh', padding: '20px' }}>
+            <div className='flex justify-center m-auto'>
+                <div className='mt-20 w-full px-20'>
+                    <h1 className='text-3xl font-bold text-center'>Verifier</h1>
+                    <div className='mt-5'>
+                        <p className='text-lg font-medium text-center'>Add and Delete Verifier</p>
+                    </div>
+                    <div className='flex gap-10 mt-10'>
+                        <div className='flex flex-col w-[30%]'>
+                            <div className='mt-5'>
+                                <div className='flex flex-col'>
+                                    <label className='text-3xl text-[#202020] font-medium'>Add Verifier</label>
+                                    <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
+                                    <Button onClick={handleAddVerifier} className='w-full mt-2 p-2 bg-blue-500 text-white rounded-md' isLoading={isAddingVerifier}
+                                        loadingText='Submitting'
+                                        colorScheme='green'
+                                        variant='solid'
+                                    >Add Verifier</Button>
+                                </div>
                             </div>
+
+                            <div className='mt-5'>
+                                <div className='flex flex-col'>
+                                    <label className='text-3xl text-[#202020] font-medium'>Delete Verifier</label>
+                                    <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
+                                    <Button onClick={handleDeleteVerifier} className='w-full mt-2 p-2 bg-red-500 text-white rounded-md'
+                                        isLoading={isDeletingVerifier}
+                                        loadingText='Submitting'
+                                        colorScheme='red'
+                                        variant='solid'
+                                    >Delete Verifier</Button>
+                                </div>
+                            </div>
+                        </div>
+                        <Center height="700px">
+                            <Divider orientation="vertical" style={{ borderColor: '#ff735c' }} />
+                        </Center>
+
+                        {/* right side */}
+                        <div className="overflow-x-auto w-full">
+                            <TableContainer>
+                                <Table variant="simple" className="min-w-full bg-white text-center">
+                                    <Thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
+                                        <Tr>
+                                            <Th className="py-3 px-6 text-left">Serial No.</Th>
+                                            <Th className="py-3 px-6 text-left">Organization Name</Th>
+                                            <Th className="py-3 px-6 text-left">Organization Address</Th>
+                                            <Th className="py-3 px-6 text-left" isNumeric>
+                                                Added On (Block No)
+                                            </Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody className="text-gray-600 text-sm font-light">
+                                        {verifiers.map((verifier, index) => (
+                                            <Tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+                                                <Td className="py-3 px-6 text-left">{index + 1}</Td>
+                                                <Td className="py-3 px-6 text-left">{verifier.orgName}</Td>
+                                                <Td className="py-3 px-6 text-left">{verifier.address}</Td>
+                                                <Td className="py-3 px-6 text-left" isNumeric>
+                                                    {verifier.addedOn}
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
                         </div>
 
-                        <div className='mt-5'>
-                            <div className='flex flex-col'>
-                                <label className='text-lg font-medium'>Delete Verifier</label>
-                                <input type='text' placeholder='Enter Verifier address' className='w-full mt-2 p-2 border-2 border-gray-300 rounded-md' value={verifier} onChange={(e) => setVerifier(e.target.value)} />
-                                <Button onClick={handleDeleteVerifier} className='w-full mt-2 p-2 bg-red-500 text-white rounded-md'
-                                isLoading={isDeletingVerifier}
-                                loadingText='Submitting'
-                                colorScheme='red'
-                                variant='solid'
-                                >Delete Verifier</Button>
-                            </div>
-                        </div>
-                    </div>
-                    <Center height='700px'>
-                        <Divider orientation='vertical' />
-                    </Center>
-                    {/* right side */}
-                    <div className='w-full'>
-                        <TableContainer>
-                            <Table variant='simple' className='text-center'>
-                                <Thead>
-                                    <Tr>
-                                        <Th>Serial No.</Th>
-                                        <Th>Oragnization Name</Th>
-                                        <Th>Oragnization Address</Th>
-                                        <Th isNumeric>Added On (Block No)</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {verifiers.map((verifier, index) => (
-                                        <Tr key={index}>
-                                            <Td>{index + 1}</Td>
-                                            <Td>{verifier.orgName}</Td>
-                                            <Td>{verifier.address}</Td>
-                                            <Td isNumeric>{verifier.addedOn}</Td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
                     </div>
                 </div>
             </div>
