@@ -128,11 +128,28 @@ const getKYCUsingAddr = async (orgId, address) => {
 }
 
 // TODO: Cooking ⚠️
-const getKYCUsingNID = async (nid) => {
+const getKYCUsingNID = async (orgId, nid) => {
     try {
-        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
-        const kyc = await contract.getKYCByNID(nid);
-        return kyc;
+        const secret = await decryptShard(orgId, "1234");
+        const signer = new ethers.Wallet(secret, provider);
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
+        
+        const {walletAddress} = await Approved.findOne({ nid: nid }, 'walletAddress');
+        console.log(walletAddress)
+        const kyc = await contract.getKYCData(walletAddress);
+        console.log(kyc)
+
+        if (kyc.reason == 'Verifier not found in list'){
+            return {status: false, message: 'Verifier not found in list'}
+        }
+        else{
+            return {
+                ipfsHash: kyc[0],
+                verified: kyc[1],
+                time: kyc[2],
+                nid 
+            };
+        }
     } catch (error) {
         return error;
     }

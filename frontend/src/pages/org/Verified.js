@@ -83,30 +83,24 @@ function Verified() {
                 isClosable: true,
             })
             setIsNID(true)
-            const { kycData } = await axios.post('http://localhost:3001/removeVerifier', {
+            setIsClicked(true);
+            const response = await axios.post('http://localhost:3001/orgKycDataByNid', {
+                orgId,
                 nid
             })
-            console.log(kycData)
-            // if (kycData) {
-            //     setIsNID(false)
-            //     setNid('')
-            //     toast({
-            //         title: 'Success',
-            //         description: "We've got the details.",
-            //         status: 'success',
-            //         duration: 9000,
-            //         isClosable: true,
-            //     })
-            // }
-            if (kycData.reason === 'Verifier not found in list') {
-                setIsNID(false)
+            const kycData = response.data.kycData;
+            console.log(kycData);
+            setKycData(kycData);
+            if (kycData) {
+                setCitizenAddr('');
+                setIsAddr(false);
                 toast({
-                    title: 'Error',
-                    description: "Verifier not found in list.",
-                    status: 'error',
+                    title: 'Success',
+                    description: "We've got the details.",
+                    status: 'success',
                     duration: 9000,
                     isClosable: true,
-                })
+                });
             }
         } catch (error) {
             console.log(error)
