@@ -3,11 +3,11 @@ import axios from "axios";
 
 function EthereumAddressInput() {
   const [verifier, setVerifier] = useState("");
+  const nid = localStorage.getItem("nidNumber");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const nid = localStorage.getItem("nidNumber");
       const response = await axios.post(`http://localhost:3001/grantVerifier`, {
         verifier,
         nid,
@@ -24,7 +24,6 @@ function EthereumAddressInput() {
   const handleRevoke = async (e) => {
     e.preventDefault();
     try {
-      const nid = "1234"; // original nid data
       const response = await axios.post(
         `http://localhost:3001/revokeVerifier`,
         {

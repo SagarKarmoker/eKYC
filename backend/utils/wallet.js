@@ -167,6 +167,7 @@ const revokeAccess = async (nid, verifierAddress) => {
     try {
         // decrypt shard
         const secret = await decryptShard(nid, "1234");
+        console.log(nid, verifierAddress, secret)
         const signer = new ethers.Wallet(secret, provider);
         const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, signer);
 
