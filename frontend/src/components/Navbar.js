@@ -78,6 +78,9 @@ function Navbar() {
                       <NavLink to="/ekyc" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "hover:underline"}>
                         <li>eKYC Data</li>
                       </NavLink>
+                      <NavLink to="/verifiedUserList" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
+                        <li>Verified User List</li>
+                      </NavLink>
                     </>
                   )}
                   <li>

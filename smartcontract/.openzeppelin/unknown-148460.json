@@ -1159,6 +1159,183 @@
           ]
         }
       }
+    },
+    "574a5cd767e224c0cf730d047152bf66be567f4702e103eb09b0ef0645cbc20f": {
+      "address": "0xa11462fc46733a1f7bCD7a11F9d600fe333dD54A",
+      "txHash": "0xd34340b0fd317e320fe7d2965922a990bf608834a9fe3dac1ab336fd73ea672e",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "authority",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:21"
+          },
+          {
+            "label": "kycData",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_address,t_array(t_struct(KYCData)275_storage)dyn_storage)",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:31"
+          },
+          {
+            "label": "listOfVerifier",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:34"
+          },
+          {
+            "label": "verifierPermissions",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:37"
+          },
+          {
+            "label": "userGrantedAccess",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:40"
+          },
+          {
+            "label": "walletContract",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_contract(IWalletContract)264",
+            "contract": "KYCRegistry",
+            "src": "contracts\\KYCRegisterV2.sol:43"
+          },
+          {
+            "label": "orgToCitizens",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_address,t_array(t_address)dyn_storage)",
+            "contract": "KYCRegistryV3",
+            "src": "contracts\\KYCRegisterV3.sol:20"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)10_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(KYCData)275_storage)dyn_storage": {
+            "label": "struct KYCRegistry.KYCData[]",
+            "numberOfBytes": "32"
+          },
+          "t_contract(IWalletContract)264": {
+            "label": "contract IWalletContract",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+            "label": "mapping(address => address[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_array(t_struct(KYCData)275_storage)dyn_storage)": {
+            "label": "mapping(address => struct KYCRegistry.KYCData[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(KYCData)275_storage": {
+            "label": "struct KYCRegistry.KYCData",
+            "members": [
+              {
+                "label": "ipfsHash",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "verified",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "time",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
     }
   }
 }
