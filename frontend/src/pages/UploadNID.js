@@ -3,6 +3,8 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import backgroundImage from "../img/loginBackground7.png"; // Import your background image
+import leftSideImage from "../img/uploadNidBG1.png"; // Import the left side image
 
 function UploadNID() {
   const [file, setFile] = useState();
@@ -34,7 +36,7 @@ function UploadNID() {
             console.log("Alert closed after 5 seconds");
           },
         });
-        navigate("/history"); //TODO: Redirect to the history page not working
+        navigate("/history");
       })
       .catch((error) => {
         console.error(error);
@@ -48,43 +50,51 @@ function UploadNID() {
   };
 
   return (
-    <div className="bg-white rounded-lg py-5">
-      <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
-        <div class="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
-          <div class="flex items-center justify-center w-full lg:p-12">
-            <div class="flex items-center xl:p-10">
-              <div className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl">
-                <h3 class="mb-12 text-4xl font-extrabold text-dark-grey-900">
-                  Upload The Excel Sheet
-                </h3>
-                <div className="flex flex-col items-center justify-center mb-8">
-                  <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-500 mb-8">
-                    <svg
-                      className="w-8 h-8"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M16.88 9.1L10.6 2.82a.86.86 0 00-.6-.25h-6A.94.94 0 003 3.5v13a.94.94 0 001 1h12a.94.94 0 001-1v-6a.86.86 0 00-.25-.6zM10 3l6 6h-4a2 2 0 01-2-2V3zm-1 9a2 2 0 11-2 2 2 2 0 012-2zm-1 5v-1a4 4 0 018 0v1a.94.94 0 01-1 1h-6a.94.94 0 01-1-1z" />
-                    </svg>
-                    <span className="mt-2 text-base leading-normal font-semibold">
-                      Select Your Excel Sheet
-                    </span>
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </label>
-                  <button
-                    className="w-full px-6 py-5 mb-5 text-sm font-bold  bg-blue-500  leading-none text-white transition duration-300 md:w-96 rounded-2xl hover:bg-sky-blue-600 focus:ring-4 focus:ring-sky-blue-100 bg-sky-blue-500"
-                    onClick={handleUpload}
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
+      <div className="bg-transparent py-5 container mx-auto flex items-center justify-center">
+        <div className="flex w-full h-full xl:gap-14 lg:justify-between md:gap-5 items-center">
+          <div className="flex items-center justify-center w-1/2 lg:p-12">
+            <div className="flex flex-col w-full h-full text-center bg-transparent rounded-3xl p-6">
+              <h3 className="mb-12 text-4xl font-extrabold text-[#202020]">
+                Upload The Excel Sheet
+              </h3>
+              <div className="flex flex-col items-center justify-center mb-8">
+                <label className="w-full flex flex-col items-center px-4 py-6 bg-[#f5f5f5] text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-[#ff735c] hover:text-white transition-all duration-500 mb-8">
+                  <svg
+                    className="w-8 h-8"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
                   >
-                    Upload
-                  </button>
-                </div>
+                    <path d="M16.88 9.1L10.6 2.82a.86.86 0 00-.6-.25h-6A.94.94 0 003 3.5v13a.94.94 0 001 1h12a.94.94 0 001-1v-6a.86.86 0 00-.25-.6zM10 3l6 6h-4a2 2 0 01-2-2V3zm-1 9a2 2 0 11-2 2 2 2 0 012-2zm-1 5v-1a4 4 0 018 0v1a.94.94 0 01-1 1h-6a.94.94 0 01-1-1z" />
+                  </svg>
+                  <span className="mt-2 text-base leading-normal font-semibold">
+                    Select Your Excel Sheet
+                  </span>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
+                <button
+                  className="w-full px-4 py-3 mb-5 text-m font-bold bg-[#ff735c] text-[#f5f5f5] hover:text-[#ff735c] transition duration-300 md:w-96 rounded-2xl border-transparent border-2 hover:bg-transparent hover:border-[#ff735c]"
+                  onClick={handleUpload}
+                >
+                  Upload
+                </button>
               </div>
             </div>
+          </div>
+          <div className="flex items-center justify-center w-1/2 lg:p-12">
+            <img
+              src={leftSideImage}
+              alt="Right Side"
+              className="object-cover w-full h-full rounded-lg"
+            />
           </div>
         </div>
       </div>
