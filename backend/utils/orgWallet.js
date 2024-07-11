@@ -5,7 +5,7 @@ const { Buffer } = require('buffer');
 const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const WalletContract = require('../abis/WalletContract.json')
-const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
+const KYCRegistryContract = require('../abis/KYCRegistryV32.json')
 const {saveTxDataForWallet} = require('./wallet')
 const Approved = require('../models/approvedModel');
 const KYC = require('../models/kycModel');
@@ -30,6 +30,8 @@ const orgGrantAccessAddresses = async (orgAddress) => {
             nid: '',
             address: ''
         }
+
+        console.log(citizens)
         
         for (let i = 0; i < citizens.length; i++) {
             console.log(citizens[i] )

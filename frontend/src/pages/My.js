@@ -7,7 +7,7 @@ function EthereumAddressInput() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const nid = localStorage.getItem("nidNumber") || "1234";
+      const nid = localStorage.getItem("nidNumber");
       const response = await axios.post(`http://localhost:3001/grantVerifier`, {
         verifier,
         nid,

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { ethers } = require('ethers');
 const WalletContract = require('../abis/WalletContract.json')
-const KYCRegistryContract = require('../abis/KYCRegistryV31.json')
+const KYCRegistryContract = require('../abis/KYCRegistryV32.json')
 const { saveTxDataForWallet } = require("./wallet");
 const Verifier = require('../models/verifierAddress');
 const { where } = require('../models/userModel');

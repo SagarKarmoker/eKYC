@@ -2,35 +2,46 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title KYCRegistryV3
+ * @title KYCRegistryV3_2
  * @author Sagar Karmoker
  * @notice Deployed KYCRegistry contract
  * @dev KYCRegistry contract hold the KYC data and verification status.
- * @dev Current version: V3
+ * @dev Current version: V3.1
  * @dev This contract is deployed and used by WalletContractV1 contract.
  * @dev WalletContractV1 contract hold the nid and wallet shard3 mapping.
  */
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "./KYCRegisterV2.sol";
+import "./KYCRegisterV3_1.sol";
 
-contract KYCRegistryV3 is Initializable, KYCRegistry {
-    // ORG -> [citizen1, citizen2, citizen3....]
-    // Mapping from organization to list of citizens
-    mapping(address => address[]) public orgToCitizens;
-
+contract KYCRegistryV32 is Initializable, KYCRegistryV31 {
     // Grant access to a verifier
-    function grantAccess(address _verifier) public virtual override{
+    function grantAccess(address _verifier) public override {
         require(listOfVerifier[_verifier], "Verifier not found in list");
+        require(!grantAccessCheck(_verifier), "Already added");
         verifierPermissions[msg.sender][_verifier] = true;
         userGrantedAccess[msg.sender].push(_verifier);
         orgToCitizens[_verifier].push(msg.sender);
         emit VerifierAccessGranted(msg.sender, _verifier);
     }
 
-    // Revoke access from a verifier
-    function revokeAccess(address _verifier) public virtual override {
+    // check before grant access if the address is already pushed or not
+    function grantAccessCheck(address _verifier) public view returns (bool) {
         require(listOfVerifier[_verifier], "Verifier not found in list");
+        address[] storage citizens = orgToCitizens[_verifier];
+        for (uint i = 0; i < citizens.length; i++) {
+            if (citizens[i] == msg.sender) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Revoke access from a verifier
+    function revokeAccess(address _verifier) public override {
+        require(listOfVerifier[_verifier], "Verifier not found in list");
+        require(verifierPermissions[msg.sender][_verifier], "Access not granted");
+        require(grantAccessCheck(_verifier), "Access not granted");
         verifierPermissions[msg.sender][_verifier] = false;
         address[] storage citizens = orgToCitizens[_verifier];
 
