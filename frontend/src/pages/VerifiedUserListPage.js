@@ -7,26 +7,34 @@ import backgroundImage from "../img/loginBackground7.png"; // Replace with your 
 const VerifiedUserListPage = () => {
   const [verifiedUsers, setVerifiedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const role = localStorage.getItem("role");
+  const orgId = localStorage.getItem("nidNumber"); //only for org
+
+  const url =
+    role === "Organization"
+      ? `http://localhost:3001/org-verified-users?orgId=${orgId}`
+      : "http://localhost:3001/verified-users";
+
 
   useEffect(() => {
     const fetchVerifiedUsers = () => {
       axios
-        .get("http://localhost:3001/verified-users")
-        .then((response) => {
-          const usersWithCountdownAndBlockStatus = response.data.map((user) => {
-            const kycExpiryDate = moment(user.kycSubmissionDate).add(1, "years");
-            const countdown = moment(kycExpiryDate).diff(moment(), "days");
-            return {
-              ...user,
-              countdown,
-              isBlocked: user.blocked || false,
-            };
+        .get(url)
+          .then((response) => {
+            const usersWithCountdownAndBlockStatus = response.data.map((user) => {
+              const kycExpiryDate = moment(user.kycSubmissionDate).add(1, "years");
+              const countdown = moment(kycExpiryDate).diff(moment(), "days");
+              return {
+                ...user,
+                countdown,
+                isBlocked: user.blocked || false,
+              };
+            });
+            setVerifiedUsers(usersWithCountdownAndBlockStatus);
+          })
+          .catch((error) => {
+            console.error("Error fetching verified users:", error);
           });
-          setVerifiedUsers(usersWithCountdownAndBlockStatus);
-        })
-        .catch((error) => {
-          console.error("Error fetching verified users:", error);
-        });
     };
 
     fetchVerifiedUsers();
@@ -82,12 +90,12 @@ const VerifiedUserListPage = () => {
 
   const filteredUsers = searchTerm
     ? verifiedUsers.filter(
-        (user) =>
-          user.nidNumber.includes(searchTerm) ||
-          user.fullNameEnglish.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.fullNameBangla.includes(searchTerm) ||
-          user.dateOfBirth.includes(searchTerm)
-      )
+      (user) =>
+        user.nidNumber.includes(searchTerm) ||
+        user.fullNameEnglish.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.fullNameBangla.includes(searchTerm) ||
+        user.dateOfBirth.includes(searchTerm)
+    )
     : verifiedUsers;
 
   return (

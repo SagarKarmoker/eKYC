@@ -33,7 +33,7 @@ function App() {
         {isUserSignedIn && <Route path="/uploadNID" element={<UploadNID />} />}
         {isUserSignedIn && (
           <Route path="/verifiedUserList" element={
-            userRole === "Admin" ? <VerifiedUserListPage /> : <Verified />
+            <VerifiedUserListPage />
           } />
         )}
         {isUserSignedIn && (

@@ -78,7 +78,7 @@ app.post("/register", async (req, res) => {
         return res.status(400).json({ error: "Full name doesn't match" });
       }
     }
-    else if(role === "Organization"){
+    else if (role === "Organization") {
       try {
         const { walletAddress, shard, orgId } = await orgCreateWallet(password);
         console.log(walletAddress, shard);
@@ -90,7 +90,7 @@ app.post("/register", async (req, res) => {
             walletAddress: walletAddress
           });
           await approved.save();
-    
+
           res.status(201).json({ walletAddress, shard });
         }
       } catch (error) {
@@ -322,9 +322,9 @@ app.post("/login", async (req, res) => {
       expiresIn: "1hr",
     });
 
-    if(nid == null){
+    if (nid == null) {
       res.json({ message: "Login successful", role: user.role, token: token });
-    }else{
+    } else {
       res.json({ message: "Login successful", role: user.role, token: token, nid: nid });
     }
   } catch (error) {
@@ -360,10 +360,10 @@ app.post("/getWalletAddress", async (req, res) => {
     const { nidNumber } = req.body;
     // console.log(nidNumber)
     const walletAddress = await getWalletAddress(nidNumber);
-    if(walletAddress != null){
+    if (walletAddress != null) {
       res.status(200).json(walletAddress.address);
     }
-    else{
+    else {
       res.status(404).json({ error: "No wallet address found" });
     }
   } catch (error) {
@@ -494,6 +494,39 @@ app.post("/acceptOrDeclineKyc", async (req, res) => {
     res.status(201).json(tx);
   } catch (error) {
     console.log(error)
+  }
+});
+
+app.get("/org-verified-users", async (req, res) => {
+  try {
+    const searchQuery = req.query.search;
+    const orgId = req.query.orgId; // Get orgId from query parameters
+    let query = {};
+
+    if (searchQuery) {
+      query = {
+        $or: [
+          { nidNumber: { $regex: searchQuery, $options: "i" } },
+          { fullNameEnglish: { $regex: searchQuery, $options: "i" } },
+          { fullNameBangla: { $regex: searchQuery, $options: "i" } },
+          { dateOfBirth: { $regex: searchQuery, $options: "i" } },
+        ],
+      };
+    }
+
+    const { address: orgAddress } = await getWalletAddress(orgId);
+    console.log(orgAddress)
+    const ekycUsers = await orgGrantAccessAddresses(orgAddress);
+    const nidNumbers = [];
+    ekycUsers.forEach((user) => {
+      nidNumbers.push(user.nid);
+    });
+
+    const verifiedUsers = await Kyc.find({ nidNumber: { $in: nidNumbers }, ...query });
+    res.json(verifiedUsers);
+  } catch (error) {
+    console.error("Error fetching verified users:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
