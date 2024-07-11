@@ -530,6 +530,19 @@ app.get("/org-verified-users", async (req, res) => {
   }
 });
 
+app.get('/get-nid-info/:nidNumber', async (req, res) => {
+  try {
+    const { nidNumber } = req.params;
+    const nidInfo = await nid.findOne({ nidNumber });
+    if (!nidInfo) {
+      return res.status(404).json({ error: "No NID information found" });
+    }
+    res.status(200).json(nidInfo);
+  } catch (error) {
+    res.status(500).json({ error: "Error getting NID information" });
+  }
+});
+
 // ADMIN PART
 app.post("/addVerifier", async (req, res) => {
   try {

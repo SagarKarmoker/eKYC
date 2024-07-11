@@ -3,12 +3,15 @@ import axios from "axios";
 import moment from "moment";
 import Swal from "sweetalert2";
 import backgroundImage from "../img/loginBackground7.png"; // Replace with your background image path
+import DisplayNidInfo from "../components/DisplayNidInfo";
 
 const VerifiedUserListPage = () => {
   const [verifiedUsers, setVerifiedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const role = localStorage.getItem("role");
   const orgId = localStorage.getItem("nidNumber"); //only for org
+  const [isNidDataVisible, setIsNidDataVisible] = useState(false);
+  const [nidInfo, setNidInfo] = useState(null);
 
   const url =
     role === "Organization"
@@ -20,21 +23,21 @@ const VerifiedUserListPage = () => {
     const fetchVerifiedUsers = () => {
       axios
         .get(url)
-          .then((response) => {
-            const usersWithCountdownAndBlockStatus = response.data.map((user) => {
-              const kycExpiryDate = moment(user.kycSubmissionDate).add(1, "years");
-              const countdown = moment(kycExpiryDate).diff(moment(), "days");
-              return {
-                ...user,
-                countdown,
-                isBlocked: user.blocked || false,
-              };
-            });
-            setVerifiedUsers(usersWithCountdownAndBlockStatus);
-          })
-          .catch((error) => {
-            console.error("Error fetching verified users:", error);
+        .then((response) => {
+          const usersWithCountdownAndBlockStatus = response.data.map((user) => {
+            const kycExpiryDate = moment(user.kycSubmissionDate).add(1, "years");
+            const countdown = moment(kycExpiryDate).diff(moment(), "days");
+            return {
+              ...user,
+              countdown,
+              isBlocked: user.blocked || false,
+            };
           });
+          setVerifiedUsers(usersWithCountdownAndBlockStatus);
+        })
+        .catch((error) => {
+          console.error("Error fetching verified users:", error);
+        });
     };
 
     fetchVerifiedUsers();
@@ -98,6 +101,17 @@ const VerifiedUserListPage = () => {
     )
     : verifiedUsers;
 
+  const getNIDInfoByOrg = async (nidNumber) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/get-nid-info/${nidNumber}`);
+      const nidInfo = response.data;
+      setNidInfo(nidInfo);
+      setIsNidDataVisible(true);
+    } catch (error) {
+      console.error("Error getting NID info:", error);
+    }
+  }
+
   return (
     <div
       className="bg-cover bg-center min-h-screen"
@@ -125,50 +139,59 @@ const VerifiedUserListPage = () => {
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-[#f5f5f5]">
-              <thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
-                <tr>
-                  <th className="py-3 px-6 text-left">NID Number</th>
-                  <th className="py-3 px-6 text-left">Full Name (English)</th>
-                  <th className="py-3 px-6 text-left">Full Name (Bangla)</th>
-                  <th className="py-3 px-6 text-left">Date of Birth</th>
-                  <th className="py-3 px-6 text-left">Expired Time</th>
-                  <th className="py-3 px-6 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-600 text-sm font-light">
-                {filteredUsers.map((user) => (
-                  <tr key={user._id} className="border-b border-gray-200 hover:bg-gray-100">
-                    <td className="py-3 px-6 text-left">{user.nidNumber}</td>
-                    <td className="py-3 px-6 text-left">{user.fullNameEnglish}</td>
-                    <td className="py-3 px-6 text-left">{user.fullNameBangla}</td>
-                    <td className="py-3 px-6 text-left">{user.dateOfBirth}</td>
-                    <td className="py-3 px-6 text-left">
-                      {user.countdown >= 0 ? `${user.countdown} Day's Remaining` : "KYC expired"}
-                    </td>
-                    <td className="py-3 px-6 text-left">
-                      {user.isBlocked ? (
-                        <button
-                          className="text-red-600 hover:text-green-800"
-                          onClick={() => handleUnblockUser(user.nidNumber)}
-                        >
-                          Blocked
-                        </button>
-                      ) : (
-                        <button
-                          className="text-green-600 hover:text-red-800"
-                          onClick={() => handleBlockUser(user.nidNumber)}
-                        >
-                          Active
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {
+            isNidDataVisible ? (
+              <>
+                <DisplayNidInfo nidInfo={nidInfo} />
+              </>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-[#f5f5f5]">
+                  <thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
+                    <tr>
+                      <th className="py-3 px-6 text-left">NID Number</th>
+                      <th className="py-3 px-6 text-left">Full Name (English)</th>
+                      <th className="py-3 px-6 text-left">Full Name (Bangla)</th>
+                      <th className="py-3 px-6 text-left">Date of Birth</th>
+                      <th className="py-3 px-6 text-left">Expired Time</th>
+                      <th className="py-3 px-6 text-left">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-600 text-sm font-light">
+                    {/* user print */}
+                    {filteredUsers.map((user) => (
+                      <tr key={user._id} className="border-b border-gray-200 hover:bg-gray-100">
+                        <td className="py-3 px-6 text-left text-blue-600 font-bold hover:cursor-pointer" onClick={() => getNIDInfoByOrg(user.nidNumber)}>{user.nidNumber}</td>
+                        <td className="py-3 px-6 text-left">{user.fullNameEnglish}</td>
+                        <td className="py-3 px-6 text-left">{user.fullNameBangla}</td>
+                        <td className="py-3 px-6 text-left">{user.dateOfBirth}</td>
+                        <td className="py-3 px-6 text-left">
+                          {user.countdown >= 0 ? `${user.countdown} Day's Remaining` : "KYC expired"}
+                        </td>
+                        <td className="py-3 px-6 text-left">
+                          {user.isBlocked ? (
+                            <button
+                              className="text-red-600 hover:text-green-800"
+                              onClick={() => handleUnblockUser(user.nidNumber)}
+                            >
+                              Blocked
+                            </button>
+                          ) : (
+                            <button
+                              className="text-green-600 hover:text-red-800"
+                              onClick={() => handleBlockUser(user.nidNumber)}
+                            >
+                              Active
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          }
         </div>
       </div>
     </div>
