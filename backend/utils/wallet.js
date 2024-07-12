@@ -238,7 +238,6 @@ const findApprovedVerifiers = async (nid) => {
         const listOfVerifiers = await Verifier.find();
         const approvedListPromises = listOfVerifiers.map(async (verifier) => {
             const details = await Approved.findOne({ walletAddress: verifier.address }).exec();
-            console.log(details)
             const fullName = await User.findOne({ phoneNumber: details.phoneNumber }, 'fullName').exec();
             const isApproved = await contract.verifierPermissions(walletAddress, verifier.address);
             if (isApproved) {
