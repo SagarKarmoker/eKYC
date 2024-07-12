@@ -139,6 +139,7 @@ function EthereumAddressInput() {
                 <Tr>
                 <Th>SL No</Th>
                 <Th>Org Name</Th>
+                <Th>Org ID</Th>
                   <Th>Org Address</Th>
                   <Th>Action</Th>
                 </Tr>
@@ -148,6 +149,7 @@ function EthereumAddressInput() {
                   <Tr key={index}>
                     <Td>{index+1}</Td>
                     <Td>{verifier.name}</Td>
+                    <Td>{verifier.orgId}</Td>
                     <Td>{verifier.verifier}</Td>
                     <Td>
                       <IconButton
