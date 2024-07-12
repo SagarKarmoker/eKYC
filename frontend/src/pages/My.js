@@ -1,9 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Text,
+  useToast,
+  IconButton,
+  Divider,
+  Center,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+} from "@chakra-ui/react";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 function EthereumAddressInput() {
   const [verifier, setVerifier] = useState("");
+  const [verifierList, setVerifierList] = useState([]);
   const nid = localStorage.getItem("nidNumber");
+  const toast = useToast();
+
+  useEffect(() => {
+    // Fetch the list of verifiers on component mount
+    const fetchVerifiers = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/verifiers?nid=${nid}`);
+        console.log(response.data.verifiers)
+        setVerifierList(response.data.verifiers);
+      } catch (error) {
+        console.error("Error fetching verifiers:", error);
+      }
+    };
+
+    fetchVerifiers();
+  }, [nid, verifierList]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,89 +47,124 @@ function EthereumAddressInput() {
         verifier,
         nid,
       });
-      console.log("KYC Approved Successfully:", response.data);
-      console.log("KYC User NID Number:", nid);
-      console.log("Submitted Ethereum Address:", verifier);
+      toast({
+        title: "KYC Approved Successfully",
+        description: `Verifier: ${verifier}`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
       setVerifier("");
+      setVerifierList([...verifierList, verifier]);
     } catch (error) {
       console.error("Error submitting KYC Approved:", error);
+      toast({
+        title: "Error",
+        description: "Failed to approve KYC.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
-  const handleRevoke = async (e) => {
-    e.preventDefault();
+  const handleRevoke = async (verifierToRevoke) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3001/revokeVerifier`,
-        {
-          verifier,
-          nid,
-        }
-      );
-      console.log("KYC Revoked Successfully:", response.data);
-      console.log("Revoked Ethereum Address:", verifier);
-      setVerifier("");
+      const response = await axios.post(`http://localhost:3001/revokeVerifier`, {
+        verifier: verifierToRevoke,
+        nid,
+      });
+      toast({
+        title: "KYC Revoked Successfully",
+        description: `Verifier: ${verifierToRevoke}`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      setVerifierList(verifierList.filter((v) => v !== verifierToRevoke));
     } catch (error) {
       console.error("Error submitting KYC Revoke:", error);
+      toast({
+        title: "Error",
+        description: "Failed to revoke KYC.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
   return (
-    <div className="bg-white rounded-lg py-5">
-      <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
-        <div class="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
-          <div class="flex items-center justify-center w-full lg:p-12">
-            <div class="flex items-center xl:p-10">
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl"
-              >
-                <h3
-                  htmlFor="ethereumAddress"
-                  className="mb-6 text-4xl font-extrabold text-dark-grey-900"
+    <Box className="bg-white rounded-lg py-5 mt-20">
+      <Flex className="container mx-auto bg-white rounded-lg p-5">
+        <Box className="flex flex-col w-1/3 pr-5">
+          <Box className="bg-white p-5 rounded-lg ">
+            <form onSubmit={handleSubmit}>
+              <Text className="mb-6 text-4xl font-extrabold text-gray-900">
+                Verifier Address
+              </Text>
+              <Input
+                type="text"
+                value={verifier}
+                onChange={(e) => setVerifier(e.target.value)}
+                placeholder="Enter your Verifier address"
+                className="mb-7"
+              />
+              <Flex gap="2" justify="center">
+                <Button type="submit" colorScheme="green" leftIcon={<CheckIcon />}>
+                  Approve
+                </Button>
+                <Button
+                  type="button"
+                  colorScheme="red"
+                  leftIcon={<CloseIcon />}
+                  onClick={() => handleRevoke(verifier)}
                 >
-                  Verifier Address
-                </h3>
-                <input
-                  type="text"
-                  id="ethereumAddress"
-                  value={verifier}
-                  onChange={(e) => setVerifier(e.target.value)}
-                  placeholder="Enter your Verifier address"
-                  className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border-2 border-gray-300"
-                />
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-green-500 text-white p-2 rounded hover:bg-green-600 transition-colors duration-150 ease-in-out flex items-center justify-center gap-2 transition duration-300"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      className=""
-                    >
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM7.247 4.86v.03L6 8.691l1.481-.445L8 7.293l.52 1.953 1.48.445-1.248-3.8h-.505zm.259-1.71c-.457 0-.842.345-.928.802h1.857c-.086-.457-.471-.802-.929-.802zm2.229 2.326l-.717-2.147c-.548-.07-1.04-.246-1.475-.489v-.047c0-.256.207-.464.464-.464h.947c.306 0 .587.117.802.312.214-.195.496-.312.802-.312h.946c.256 0 .464.208.464.464v.047c-.435.243-.927.419-1.475.489l-.717 2.147zm3.095 1.098l-1.234 3.733-1.368-.486-.775-2.916-.775 2.916-1.368.486-1.234-3.733H5.658L4.896 13h6.208l-.759-2.876h-1.519z" />
-                    </svg>
-                    Approve
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleRevoke}
-                    className="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 flex items-center justify-center gap-2 transition duration-300"
-                  >
-                    {/* Revoke Icon SVG or Text */}
-                    Revoke
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                  Revoke
+                </Button>
+              </Flex>
+            </form>
+          </Box>
+        </Box>
+        <Center height='700px'>
+          <Divider orientation='vertical' />
+        </Center>
+        <Box className="flex flex-col w-2/3 pl-5">
+          <Box className="bg-white p-5 rounded-lg">
+            <Text className="mb-6 text-4xl font-extrabold text-center text-gray-900">
+              Given Access Verifiers
+            </Text>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                <Th>SL No</Th>
+                <Th>Org Name</Th>
+                  <Th>Org Address</Th>
+                  <Th>Action</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {verifierList.map((verifier, index) => (
+                  <Tr key={index}>
+                    <Td>{index+1}</Td>
+                    <Td>{verifier.name}</Td>
+                    <Td>{verifier.verifier}</Td>
+                    <Td>
+                      <IconButton
+                        aria-label="Revoke Verifier"
+                        icon={<CloseIcon />}
+                        colorScheme="red"
+                        onClick={() => handleRevoke(verifier.verifier)}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+        </Box>
+      </Flex>
+    </Box>
   );
 }
 

@@ -6,7 +6,11 @@ const CryptoJS = require('crypto-js');
 const ShardKey = require("../models/shardKeyModel");
 const Transaction = require("../models/transactionModel");
 const WalletContract = require('../abis/WalletContract.json')
-const KYCRegistryContract = require('../abis/KYCRegistryV32.json')
+const KYCRegistryContract = require('../abis/KYCRegistryV32.json');
+const Approved = require('../models/approvedModel');
+const Verifier = require('../models/verifierAddress');
+const { name } = require('ejs');
+const User = require('../models/userModel');
 
 // user->shard1 (browser)
 // nid->shard2 (kms)
@@ -191,10 +195,10 @@ const getAllTransactions = async (walletAddress) => {
     try {
         const transactions = await Transaction.find({
             $or: [
-              { to: walletAddress },
-              { from: walletAddress }
+                { to: walletAddress },
+                { from: walletAddress }
             ]
-          }).exec();
+        }).exec();
 
         return transactions;
     } catch (error) {
@@ -226,8 +230,41 @@ const saveTxDataForWallet = async (tx, nid, reason) => {
     }
 }
 
+const findApprovedVerifiers = async (nid) => {
+    try {
+        const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
+        const { walletAddress } = await Approved.findOne({ nid: nid }, 'walletAddress').exec();
+
+        const listOfVerifiers = await Verifier.find();
+        const approvedListPromises = listOfVerifiers.map(async (verifier) => {
+            const phoneNumber = await Approved.findOne({ walletAddress: verifier.address }, 'phoneNumber').exec();
+            const fullName = await User.findOne({ phoneNumber: phoneNumber.phoneNumber }, 'fullName').exec();
+            const isApproved = await contract.verifierPermissions(walletAddress, verifier.address);
+            if (isApproved) {
+                return {
+                    verifier: verifier.address,
+                    name: fullName.fullName,
+                    isApproved: isApproved
+                };
+            }
+            return null;
+        });
+
+        // Wait for all promises to resolve
+        const approvedList = await Promise.all(approvedListPromises);
+
+        // console.log(approvedList)
+        // Filter out null values
+        return approvedList.filter(item => item !== null);
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
+
 // export the function
 module.exports = {
     createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
-    getAllTransactions, saveTxDataForWallet, decryptShard
+    getAllTransactions, saveTxDataForWallet, decryptShard, findApprovedVerifiers
 }

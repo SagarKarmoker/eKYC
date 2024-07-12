@@ -12,7 +12,7 @@ const Approved = require('./models/approvedModel');
 
 // Smart contract functions
 const { createWallet, getWalletAddress, submitKYC, grantAccess, revokeAccess,
-  getAllTransactions
+  getAllTransactions, findApprovedVerifiers
 } = require("./utils/wallet");
 
 const { addVerifier, removeVerifier, getAllVerifierList } = require("./utils/adminWallet");
@@ -540,6 +540,18 @@ app.get('/get-nid-info/:nidNumber', async (req, res) => {
     res.status(200).json(nidInfo);
   } catch (error) {
     res.status(500).json({ error: "Error getting NID information" });
+  }
+});
+
+app.get('/verifiers', async (req, res) => {
+  try {
+    const { nid } = req.query;
+    // search operation on the blockchain
+    const verifiers = await findApprovedVerifiers(nid);
+    res.status(200).json({ verifiers });
+  } catch (error) {
+    console.error("Error fetching verifiers:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
