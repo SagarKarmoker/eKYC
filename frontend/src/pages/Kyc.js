@@ -35,8 +35,8 @@ function Kyc() {
         setFullNameEnglish("");
         setFullNameBangla("");
         setDateOfBirth("");
-        const access = response.data.access;
-        localStorage.setItem("access", access);
+        // const access = response.data.access;
+        // localStorage.setItem("access", access); // TODO: ⚠️⚠️⚠️⚠️⚠️
         localStorage.setItem("nidNumber", nidNumber);
         navigate(`/user/${nidNumber}`);
       })

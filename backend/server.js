@@ -322,10 +322,13 @@ app.post("/login", async (req, res) => {
       expiresIn: "1hr",
     });
 
-    if (nid == null) {
+    // isKyc Approved
+    const response = await Approved.findOne({phoneNumber: phoneNumber}).exec()
+
+    if (nid == null && response == null) {
       res.json({ message: "Login successful", role: user.role, token: token });
     } else {
-      res.json({ message: "Login successful", role: user.role, token: token, nid: nid });
+      res.json({ message: "Login successful", role: user.role, token: token, nid: nid, access: true });
     }
   } catch (error) {
     res.status(500).json({ error: "Error logging in" });
