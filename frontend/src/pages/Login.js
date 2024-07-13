@@ -31,7 +31,7 @@ function Login() {
         password,
       });
       console.log(response.data)
-      const { token, role, nid, message } = response.data;
+      const { token, role, nid, access, message } = response.data;
       Swal.fire({
         title: "Success",
         text: `${message} ${role}`,
@@ -48,6 +48,7 @@ function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("phoneNumber", phoneNumber);
+      localStorage.setItem("access", access)
       localStorage.setItem("nidNumber", nid); // Save the NID number in local storage
     } catch (error) {
       console.log("Login Error", error);

@@ -5,7 +5,7 @@ import logoImg from '../img/taxSheildLogoTransparent.png'; // Import the login i
 function Navbar() {
   const isUserSignedIn = !!localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
-  const isKycSubmitted = !!localStorage.getItem("access");
+  const isKycSubmitted = !!localStorage.getItem("access"); // TODO: ⚠️⚠️⚠️⚠️
   const navigate = useNavigate();
 
   const handleSignOut = () => {
