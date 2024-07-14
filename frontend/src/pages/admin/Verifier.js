@@ -169,7 +169,7 @@ function Verifier() {
                                                 <Td className="py-3 px-6 text-left">{verifier.orgName}</Td>
                                                 <Td className="py-3 px-6 text-left">{verifier.address}</Td>
                                                 <Td className="py-3 px-6 text-left" isNumeric>
-                                                    {verifier.addedOn}
+                                                    { new Date(verifier.addedOn).toLocaleString() }
                                                 </Td>
                                             </Tr>
                                         ))}

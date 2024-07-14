@@ -5,6 +5,8 @@ const KYCRegistryContract = require('../abis/KYCRegistryV32.json')
 const { saveTxDataForWallet } = require("./wallet");
 const Verifier = require('../models/verifierAddress');
 const { where } = require('../models/userModel');
+const Approved = require('../models/approvedModel');
+const User = require('../models/userModel');
 
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
@@ -29,8 +31,11 @@ const addVerifier = async (verifierAddress) => {
         if (tx !== null) {
             await saveTxDataForWallet(tx, 0, `Verifier added ${verifierAddress}`);
 
+            const phoneNumber = await Approved.findOne({ walletAddress: verifierAddress }, 'phoneNumber');
+            const orgName = await User.findOne({ phoneNumber: phoneNumber.phoneNumber }, 'fullName');
+
             const verifier = new Verifier({
-                orgName: "Verifier", // TODO: Add orgName in the request ⚠️
+                orgName: orgName.fullName,
                 address: verifierAddress,
                 isActivated: true,
                 hash: tx.hash,
