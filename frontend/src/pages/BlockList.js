@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import backgroundImage from "../img/loginBackground7.png"; // Replace with your background image path
+import DisplayNidInfo from "../components/DisplayNidInfo";
 
 const BlockListPage = () => {
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isNidDataVisible, setIsNidDataVisible] = useState(false);
+  const [nidInfo, setNidInfo] = useState(null);
 
   useEffect(() => {
     // Fetch the list of blocked users from the backend
@@ -31,15 +34,25 @@ const BlockListPage = () => {
   const handleClear = () => {
     setSearchTerm("");
   };
+  const getNIDInfoByOrg = async (nidNumber) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/get-nid-info/${nidNumber}`);
+      const nidInfo = response.data;
+      setNidInfo(nidInfo);
+      setIsNidDataVisible(true);
+    } catch (error) {
+      console.error("Error getting NID info:", error);
+    }
+  }
 
   const filteredUsers = searchTerm
     ? blockedUsers.filter(
-        (user) =>
-          user.nidNumber.includes(searchTerm) ||
-          user.fullNameEnglish.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.fullNameBangla.includes(searchTerm) ||
-          user.dateOfBirth.includes(searchTerm)
-      )
+      (user) =>
+        user.nidNumber.includes(searchTerm) ||
+        user.fullNameEnglish.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.fullNameBangla.includes(searchTerm) ||
+        user.dateOfBirth.includes(searchTerm)
+    )
     : blockedUsers;
 
   return (
@@ -69,32 +82,41 @@ const BlockListPage = () => {
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-[#f5f5f5]">
-              <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <tr>
-                  <th className="py-3 px-6 text-left">NID Number</th>
-                  <th className="py-3 px-6 text-left">Full Name (English)</th>
-                  <th className="py-3 px-6 text-left">Full Name (Bangla)</th>
-                  <th className="py-3 px-6 text-left">Date of Birth</th>
-                  <th className="py-3 px-6 text-left">Expired Time</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-600 text-sm font-light">
-                {filteredUsers.map((user) => (
-                  <tr key={user.nidNumber} className="border-b border-gray-200 hover:bg-gray-100">
-                    <td className="py-3 px-6 text-left">{user.nidNumber}</td>
-                    <td className="py-3 px-6 text-left">{user.fullNameEnglish}</td>
-                    <td className="py-3 px-6 text-left">{user.fullNameBangla}</td>
-                    <td className="py-3 px-6 text-left">{user.dateOfBirth}</td>
-                    <td className="py-3 px-6 text-left">
-                      {user.countdown >= 0 ? `${user.countdown} Day's Remaining` : "KYC expired"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {
+            isNidDataVisible ? (
+              <>
+                <DisplayNidInfo nidInfo={nidInfo} />
+              </>
+            ) : (
+
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-[#f5f5f5]">
+                  <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <tr>
+                      <th className="py-3 px-6 text-left">NID Number</th>
+                      <th className="py-3 px-6 text-left">Full Name (English)</th>
+                      <th className="py-3 px-6 text-left">Full Name (Bangla)</th>
+                      <th className="py-3 px-6 text-left">Date of Birth</th>
+                      <th className="py-3 px-6 text-left">Expired Time</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-600 text-sm font-light">
+                    {filteredUsers.map((user) => (
+                      <tr key={user.nidNumber} className="border-b border-gray-200 hover:bg-gray-100">
+                        <td className="py-3 px-6 text-left text-[#ff735c] underline font-bold hover:cursor-pointer hover:text-blue-600" onClick={() => getNIDInfoByOrg(user.nidNumber)}>{user.nidNumber}</td>
+                        <td className="py-3 px-6 text-left">{user.fullNameEnglish}</td>
+                        <td className="py-3 px-6 text-left">{user.fullNameBangla}</td>
+                        <td className="py-3 px-6 text-left">{user.dateOfBirth}</td>
+                        <td className="py-3 px-6 text-left">
+                          {user.countdown >= 0 ? `${user.countdown} Day's Remaining` : "KYC expired"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          }
         </div>
       </div>
     </div>
