@@ -127,7 +127,6 @@ const getKYCUsingAddr = async (orgId, address) => {
     }
 }
 
-// TODO: Cooking ⚠️
 const getKYCUsingNID = async (orgId, nid) => {
     try {
         const secret = await decryptShard(orgId, "1234");
@@ -155,7 +154,6 @@ const getKYCUsingNID = async (orgId, nid) => {
     }
 }
 
-// TODO: Cooking ⚠️
 const orgGrantAccess = async (orgAddress, citizenAddress) => {
     try {
         const contract = new ethers.Contract(KYCRegistryContractAddress, KYCRegistryContract.abi, provider);
@@ -165,7 +163,6 @@ const orgGrantAccess = async (orgAddress, citizenAddress) => {
         return error;
     }
 }
-
 
 const acceptOrDeclineKyc = async(orgId, address, status) => {
     try {
