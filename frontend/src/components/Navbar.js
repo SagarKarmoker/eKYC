@@ -49,7 +49,7 @@ function Navbar() {
                           <NavLink to="/my" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
                             <li>My KYC</li>
                           </NavLink>
-                          <NavLink to="/history" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "hover:underline"}>
+                          <NavLink to="/history" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
                             <li>History</li>
                           </NavLink>
                         </>
@@ -75,7 +75,7 @@ function Navbar() {
                   {/* TODO: Cooking */}
                   {userRole === "Organization" && (
                     <>
-                      <NavLink to="/ekyc" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "hover:underline"}>
+                      <NavLink to="/ekyc" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
                         <li>eKYC Data</li>
                       </NavLink>
                       <NavLink to="/verifiedUserList" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
@@ -95,7 +95,7 @@ function Navbar() {
               )}
               {!isUserSignedIn && (
                 <>
-                  <NavLink to="/login" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#202020] hover:text-[#ff735c] text-m font-medium"}>
+                  <NavLink to="/login" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#f5f5f5] hover:text-[#202020] bg-[#ff735c] hover:bg-gray-300 inline-flex items-center justify-center px-3 py-2 border border-transparent text-m font-medium rounded-md shadow-sm"}>
                     <li>Login</li>
                   </NavLink>
                   <NavLink to="/signup" className={({ isActive }) => isActive ? "text-[#ff735c] text-m font-medium" : "text-[#f5f5f5] hover:text-[#202020] bg-[#ff735c] hover:bg-gray-300 inline-flex items-center justify-center px-3 py-2 border border-transparent text-m font-medium rounded-md shadow-sm"}>

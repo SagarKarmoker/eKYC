@@ -7,7 +7,7 @@ function DisplayNidInfo({ nidInfo }) {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate(-1);  
+        navigate(0);  
     };
 
     return (
@@ -55,12 +55,13 @@ function DisplayNidInfo({ nidInfo }) {
                     </VStack>
                 </VStack>
                 <Flex justify="center" mt={6}>
-                    <Button colorScheme="teal" onClick={handleBack}>
+                    <Button colorScheme="[#ff735c]" className="text-[#f5f5f5] hover:text-[#202020] bg-[#ff735c] hover:bg-gray-300 inline-flex items-center justify-center px-3 py-2 border border-transparent text-m font-medium rounded-md shadow-sm" onClick={handleBack}>
                         Back
                     </Button>
                 </Flex>
             </Box>
         </Flex>
+        
     );
 }
 
