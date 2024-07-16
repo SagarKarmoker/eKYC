@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import backgroundImage from "../img/loginBackground7.png"; // Replace with your background image path
+import backgroundImage from "../img/loginBackground7.png";
 import DisplayNidInfo from "../components/DisplayNidInfo";
 
 const BlockListPage = () => {
@@ -75,7 +75,7 @@ const BlockListPage = () => {
                 />
                 <button
                   onClick={handleClear}
-                  className="px-4 py-2 bg-red-500 text-white rounded-r-md hover:bg-red-600 focus:outline-none"
+                  className="px-4 py-2 bg-[#ff735c] text-white rounded-r-md hover:bg-red-600 focus:outline-none"
                 >
                   Clear
                 </button>

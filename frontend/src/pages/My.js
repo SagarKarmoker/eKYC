@@ -18,6 +18,7 @@ import {
   Td,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import backgroundImage from "../img/loginBackground7.png"; // Adjust the path as necessary
 
 function EthereumAddressInput() {
   const [verifier, setVerifier] = useState("");
@@ -30,7 +31,7 @@ function EthereumAddressInput() {
     const fetchVerifiers = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/verifiers?nid=${nid}`);
-        console.log(response.data.verifiers)
+        console.log(response.data.verifiers);
         setVerifierList(response.data.verifiers);
       } catch (error) {
         console.error("Error fetching verifiers:", error);
@@ -95,12 +96,22 @@ function EthereumAddressInput() {
   };
 
   return (
-    <Box className="bg-white rounded-lg py-5 mt-20">
-      <Flex className="container mx-auto bg-white rounded-lg p-5">
-        <Box className="flex flex-col w-1/3 pr-5">
-          <Box className="bg-white p-5 rounded-lg ">
+    <Box
+      backgroundImage={`url(${backgroundImage})`}
+      backgroundSize="cover"
+      backgroundPosition="center"
+      minH="100vh"
+      py="5"
+    >
+      <Flex className="container mx-auto bg-transparent rounded-lg p-5">
+        <Box
+          className="flex flex-col w-1/3 pr-5"
+          display="flex"
+          alignItems="center"
+        >
+          <Box className="mt-10 bg-[#f5f5f5] p-5 rounded-lg" position={"fixed"}>
             <form onSubmit={handleSubmit}>
-              <Text className="mb-6 text-4xl font-extrabold text-gray-900">
+              <Text className="mt-6 mb-6 text-4xl font-extrabold text-[#202020] text-center">
                 Verifier Address
               </Text>
               <Input
@@ -126,32 +137,32 @@ function EthereumAddressInput() {
             </form>
           </Box>
         </Box>
-        <Center height='700px'>
-          <Divider orientation='vertical' />
+        <Center height="700px">
+          <Divider orientation="vertical" style={{ borderColor: '#ff735c' }} />
         </Center>
         <Box className="flex flex-col w-2/3 pl-5">
-          <Box className="bg-white p-5 rounded-lg">
-            <Text className="mb-6 text-4xl font-extrabold text-center text-gray-900">
+          <Box className="mt-6 bg-transparent p-5 rounded-lg">
+            <Text className="mt-6 mb-6 text-4xl font-extrabold text-center text-[#202020]">
               Given Access Verifiers
             </Text>
-            <Table variant="simple">
-              <Thead>
+            <Table className="min-w-full bg-[#f5f5f5]">
+              <Thead className="bg-gray-200 text-[#202020] uppercase text-sm leading-normal">
                 <Tr>
-                <Th>SL No</Th>
-                <Th>Org Name</Th>
-                <Th>Org ID</Th>
-                  <Th>Org Address</Th>
-                  <Th>Action</Th>
+                  <Th className="py-3 px-6 text-left">SL No</Th>
+                  <Th className="py-3 px-6 text-left">Org Name</Th>
+                  <Th className="py-3 px-6 text-left">Org ID</Th>
+                  <Th className="py-3 px-6 text-left">Org Address</Th>
+                  <Th className="py-3 px-6 text-left">Action</Th>
                 </Tr>
               </Thead>
-              <Tbody>
+              <Tbody className="text-[#202020] text-sm font-light">
                 {verifierList.map((verifier, index) => (
-                  <Tr key={index}>
-                    <Td>{index+1}</Td>
-                    <Td>{verifier.name}</Td>
-                    <Td>{verifier.orgId}</Td>
-                    <Td>{verifier.verifier}</Td>
-                    <Td>
+                  <Tr key={index} className="border-b border-gray-200 bg-white hover:bg-gray-100">
+                    <Td className="py-3 px-6 text-left">{index + 1}</Td>
+                    <Td className="py-3 px-6 text-left">{verifier.name}</Td>
+                    <Td className="py-3 px-6 text-left">{verifier.orgId}</Td>
+                    <Td className="py-3 px-6 text-left">{verifier.verifier}</Td>
+                    <Td className="py-3 px-6 text-left">
                       <IconButton
                         aria-label="Revoke Verifier"
                         icon={<CloseIcon />}
