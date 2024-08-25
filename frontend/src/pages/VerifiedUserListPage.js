@@ -15,8 +15,8 @@ const VerifiedUserListPage = () => {
 
   const url =
     role === "Organization"
-      ? `http://localhost:3001/org-verified-users?orgId=${orgId}`
-      : "http://localhost:3001/verified-users";
+      ? `https://ekyc-4ash.onrender.com/org-verified-users?orgId=${orgId}`
+      : "https://ekyc-4ash.onrender.com/verified-users";
 
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const VerifiedUserListPage = () => {
 
   const handleBlockUser = (nidNumber) => {
     axios
-      .post("http://localhost:3001/block-user", { nidNumber })
+      .post("https://ekyc-4ash.onrender.com/block-user", { nidNumber })
       .then(() => {
         Swal.fire("Blocked!", "The user has been blocked.", "success");
         setVerifiedUsers(
@@ -65,7 +65,7 @@ const VerifiedUserListPage = () => {
 
   const handleUnblockUser = (nidNumber) => {
     axios
-      .post("http://localhost:3001/unblock-user", { nidNumber })
+      .post("https://ekyc-4ash.onrender.com/unblock-user", { nidNumber })
       .then(() => {
         Swal.fire("Unblocked!", "The user has been unblocked.", "success");
         setVerifiedUsers(
@@ -103,7 +103,7 @@ const VerifiedUserListPage = () => {
 
   const getNIDInfoByOrg = async (nidNumber) => {
     try {
-      const response = await axios.get(`http://localhost:3001/get-nid-info/${nidNumber}`);
+      const response = await axios.get(`https://ekyc-4ash.onrender.com/get-nid-info/${nidNumber}`);
       const nidInfo = response.data;
       setNidInfo(nidInfo);
       setIsNidDataVisible(true);

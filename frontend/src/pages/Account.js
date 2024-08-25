@@ -20,7 +20,7 @@ function Account() {
       console.log("NID Number before:", nidNumber);
       if (nidNumber !== "undefined") {
         console.log("NID Number: after", nidNumber);
-        const response = await axios.post(`http://localhost:3001/getWalletAddress`, {
+        const response = await axios.post(`https://ekyc-4ash.onrender.com/getWalletAddress`, {
           nidNumber: nidNumber,
         });
         setWalletAddress(response.data);
@@ -104,7 +104,7 @@ export default Account;
 //       console.log("NID Number before:", nidNumber);
 //       if (nidNumber !== "undefined") {
 //         console.log("NID Number: after", nidNumber);
-//         const response = await axios.post(`http://localhost:3001/getWalletAddress`, {
+//         const response = await axios.post(`https://ekyc-4ash.onrender.com/getWalletAddress`, {
 //           nidNumber: nidNumber,
 //         });
 //         setWalletAddress(response.data);

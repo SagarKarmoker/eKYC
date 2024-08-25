@@ -14,7 +14,7 @@ function ImageUpload() {
 
   const storeKYCData = async (ipfsHash) => {
     try {
-      const response = await axios.post(`http://localhost:3001/submitKYC`, {
+      const response = await axios.post(`https://ekyc-4ash.onrender.com/submitKYC`, {
         ipfsHash,
         nid,
       });
@@ -212,7 +212,7 @@ export default ImageUpload;
 
 //   const storeKYCData = async (ipfsHash) => {
 //     try {
-//       const response = await axios.post(`http://localhost:3001/submitKYC`, {
+//       const response = await axios.post(`https://ekyc-4ash.onrender.com/submitKYC`, {
 //         ipfsHash,
 //         nid,
 //       });

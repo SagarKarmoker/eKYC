@@ -42,7 +42,7 @@ function Verified() {
             }
             setIsAddr(true);
             setIsClicked(true);
-            const response = await axios.post('http://localhost:3001/orgKycDataByAddress', {
+            const response = await axios.post('https://ekyc-4ash.onrender.com/orgKycDataByAddress', {
                 orgId,
                 citizenAddr
             });
@@ -84,7 +84,7 @@ function Verified() {
             })
             setIsNID(true)
             setIsClicked(true);
-            const response = await axios.post('http://localhost:3001/orgKycDataByNid', {
+            const response = await axios.post('https://ekyc-4ash.onrender.com/orgKycDataByNid', {
                 orgId,
                 nid
             })
@@ -123,7 +123,7 @@ function Verified() {
             console.log("NID Number before:", nidNumber);
             if (nidNumber !== "undefined") {
                 console.log("NID Number: after", nidNumber);
-                const response = await axios.post(`http://localhost:3001/getWalletAddress`, {
+                const response = await axios.post(`https://ekyc-4ash.onrender.com/getWalletAddress`, {
                     nidNumber: nidNumber,
                 });
                 setWalletAddress(response.data);
@@ -146,7 +146,7 @@ function Verified() {
             try {
                 await getWalletAddress();
                 console.log(walletAddress)
-                const res = await axios.post('http://localhost:3001/orgGrantAccess', {
+                const res = await axios.post('https://ekyc-4ash.onrender.com/orgGrantAccess', {
                     orgAddress: walletAddress
                 })
                 console.log(res.data)

@@ -30,7 +30,7 @@ function Verifier() {
                 isClosable: true,
             })
             setIsAddingVerifier(true)
-            const res = await axios.post('http://localhost:3001/addVerifier', {
+            const res = await axios.post('https://ekyc-4ash.onrender.com/addVerifier', {
                 verifier
             })
             console.log(res.data)
@@ -68,7 +68,7 @@ function Verifier() {
                 isClosable: true,
             })
             setIsDeletingVerifier(true)
-            const res = await axios.post('http://localhost:3001/removeVerifier', {
+            const res = await axios.post('https://ekyc-4ash.onrender.com/removeVerifier', {
                 verifier
             })
             console.log(res.data)
@@ -99,7 +99,7 @@ function Verifier() {
     useEffect(() => {
         const fetchVerifiers = async () => {
             try {
-                const res = await axios.post('http://localhost:3001/getAllVerifiers')
+                const res = await axios.post('https://ekyc-4ash.onrender.com/getAllVerifiers')
                 console.log(res.data)
                 setVerifiers(res.data)
             } catch (error) {

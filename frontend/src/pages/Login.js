@@ -26,7 +26,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post("https://ekyc-4ash.onrender.com/login", {
         phoneNumber,
         password,
       });
@@ -163,7 +163,7 @@ export default Login;
 //   }, []);
 
 //   const fetchUsers = () => {
-//     axios.get("http://localhost:3001/register").then((res) => {
+//     axios.get("https://ekyc-4ash.onrender.com/register").then((res) => {
 //       console.log(res.data);
 //     });
 //   };
@@ -183,7 +183,7 @@ export default Login;
 //     }
 
 //     try {
-//       const response = await axios.post("http://localhost:3001/login", {
+//       const response = await axios.post("https://ekyc-4ash.onrender.com/login", {
 //         phoneNumber,
 //         password,
 //       });

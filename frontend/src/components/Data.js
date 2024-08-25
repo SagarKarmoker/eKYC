@@ -5,7 +5,7 @@ function Data() {
   const [nidUsers, setNidUsers] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3001/nid")
+      .get("https://ekyc-4ash.onrender.com/nid")
       .then((nidUsers) => setNidUsers(nidUsers.data))
       .catch((err) => console.log(err));
   }, []);
