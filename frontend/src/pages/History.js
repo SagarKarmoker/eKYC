@@ -18,7 +18,7 @@ function History() {
 
     useEffect(() => {
         axios
-            .post("http://localhost:3001/getAllTxs", {
+            .post("https://ekyc-4ash.onrender.com/getAllTxs", {
                 nid: localStorage.getItem("nidNumber"),
             })
             .then((res) => {

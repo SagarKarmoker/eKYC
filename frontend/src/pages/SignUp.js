@@ -36,7 +36,7 @@ function SignUp() {
   }, []);
 
   const fetchUsers = () => {
-    axios.get("http://localhost:3001/register").then((res) => {
+    axios.get("https://ekyc-4ash.onrender.com/register").then((res) => {
       // console.log(res.data)
     });
   };
@@ -56,7 +56,7 @@ function SignUp() {
     // Proceed with full name verification only if the role is 'taxpayer'
     if (role === "Taxpayer") {
       try {
-        const response = await axios.get("http://localhost:3001/people");
+        const response = await axios.get("https://ekyc-4ash.onrender.com/people");
         const peopleData = response.data;
         const userFullName = fullName;
         const matchingPerson = peopleData.find(
@@ -115,7 +115,7 @@ function SignUp() {
             setVerificationCode(code);
 
             return axios
-              .post("http://localhost:3001/register", {
+              .post("https://ekyc-4ash.onrender.com/register", {
                 fullName,
                 phoneNumber,
                 password,
@@ -368,7 +368,7 @@ export default SignUp;
 //   }, []);
 
 //   const fetchUsers = () => {
-//     axios.get("http://localhost:3001/register").then((res) => {
+//     axios.get("https://ekyc-4ash.onrender.com/register").then((res) => {
 //       // console.log(res.data)
 //     });
 //   };
@@ -388,7 +388,7 @@ export default SignUp;
 //     // Proceed with full name verification only if the role is 'taxpayer'
 //     if (role === "Taxpayer") {
 //       try {
-//         const response = await axios.get("http://localhost:3001/people");
+//         const response = await axios.get("https://ekyc-4ash.onrender.com/people");
 //         const peopleData = response.data;
 //         const userFullName = fullName;
 //         const matchingPerson = peopleData.find(
@@ -447,7 +447,7 @@ export default SignUp;
 //             setVerificationCode(code);
 
 //             return axios
-//               .post("http://localhost:3001/register", {
+//               .post("https://ekyc-4ash.onrender.com/register", {
 //                 fullName,
 //                 phoneNumber,
 //                 password,

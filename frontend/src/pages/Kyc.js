@@ -15,7 +15,7 @@ function Kyc() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3001/kyc", {
+      .post("https://ekyc-4ash.onrender.com/kyc", {
         nidNumber,
         fullNameEnglish,
         fullNameBangla,
@@ -166,7 +166,7 @@ export default Kyc;
 //   const handleSubmit = (event) => {
 //     event.preventDefault();
 //     axios
-//       .post("http://localhost:3001/kyc", {
+//       .post("https://ekyc-4ash.onrender.com/kyc", {
 //         nidNumber,
 //         fullNameEnglish,
 //         fullNameBangla,

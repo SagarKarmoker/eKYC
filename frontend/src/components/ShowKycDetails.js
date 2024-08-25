@@ -23,7 +23,7 @@ const ShowKycDetails = ({ kycData, citizenAddr }) => {
     const handleVrifyKyc = async () => {
         try {
             // Verify KYC
-            const response = await axios.post('http://localhost:3001/acceptOrDeclineKyc', {
+            const response = await axios.post('https://ekyc-4ash.onrender.com/acceptOrDeclineKyc', {
                 orgId: orgId,
                 address: citizenAddr,
                 status: verified ? 'true' : 'false'

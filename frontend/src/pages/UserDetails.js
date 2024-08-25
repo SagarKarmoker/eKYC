@@ -20,7 +20,7 @@ function UserDetails() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:3001/user/${nidNumber}`)
+      .get(`https://ekyc-4ash.onrender.com/user/${nidNumber}`)
       .then((response) => {
         // Handle the success response
         const { user } = response.data;
@@ -62,7 +62,7 @@ function UserDetails() {
         preConfirm: (password) => {
           setPassword(password);
           return axios
-            .post(`http://localhost:3001/verifyPass`, {
+            .post(`https://ekyc-4ash.onrender.com/verifyPass`, {
               nid: nidNumber,
               password: password,
             })
@@ -96,7 +96,7 @@ function UserDetails() {
       if (nidNumber) {
         console.log(nidNumber);
         const response = await axios.post(
-          `http://localhost:3001/createWallet`,
+          `https://ekyc-4ash.onrender.com/createWallet`,
           {
             nid: nidNumber,
             phoneNumber: localStorage.getItem("phoneNumber"),

@@ -23,7 +23,7 @@ function UploadNID() {
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
     axios
-      .post("http://localhost:3001/upload", jsonData)
+      .post("https://ekyc-4ash.onrender.com/upload", jsonData)
       .then((response) => {
         console.log(response.data);
         Swal.fire({

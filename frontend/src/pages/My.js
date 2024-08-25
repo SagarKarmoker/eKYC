@@ -30,7 +30,7 @@ function EthereumAddressInput() {
     // Fetch the list of verifiers on component mount
     const fetchVerifiers = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/verifiers?nid=${nid}`);
+        const response = await axios.get(`https://ekyc-4ash.onrender.com/verifiers?nid=${nid}`);
         console.log(response.data.verifiers);
         setVerifierList(response.data.verifiers);
       } catch (error) {
@@ -44,7 +44,7 @@ function EthereumAddressInput() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/grantVerifier`, {
+      const response = await axios.post(`https://ekyc-4ash.onrender.com/grantVerifier`, {
         verifier,
         nid,
       });
@@ -71,7 +71,7 @@ function EthereumAddressInput() {
 
   const handleRevoke = async (verifierToRevoke) => {
     try {
-      const response = await axios.post(`http://localhost:3001/revokeVerifier`, {
+      const response = await axios.post(`https://ekyc-4ash.onrender.com/revokeVerifier`, {
         verifier: verifierToRevoke,
         nid,
       });

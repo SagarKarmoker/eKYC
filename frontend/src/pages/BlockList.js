@@ -13,7 +13,7 @@ const BlockListPage = () => {
   useEffect(() => {
     // Fetch the list of blocked users from the backend
     axios
-      .get("http://localhost:3001/blocked-users")
+      .get("https://ekyc-4ash.onrender.com/blocked-users")
       .then((response) => {
         const usersWithCountdown = response.data.map((user) => {
           const kycExpiryDate = moment(user.kycSubmissionDate).add(1, "years");
@@ -36,7 +36,7 @@ const BlockListPage = () => {
   };
   const getNIDInfoByOrg = async (nidNumber) => {
     try {
-      const response = await axios.get(`http://localhost:3001/get-nid-info/${nidNumber}`);
+      const response = await axios.get(`https://ekyc-4ash.onrender.com/get-nid-info/${nidNumber}`);
       const nidInfo = response.data;
       setNidInfo(nidInfo);
       setIsNidDataVisible(true);
